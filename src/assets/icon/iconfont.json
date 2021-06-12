@@ -1,0 +1,65 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "807273",
+      "name": "静音",
+      "font_class": "jingyin",
+      "unicode": "e65e",
+      "unicode_decimal": 58974
+    },
+    {
+      "icon_id": "807277",
+      "name": "音量",
+      "font_class": "yinliang",
+      "unicode": "e662",
+      "unicode_decimal": 58978
+    },
+    {
+      "icon_id": "1703514",
+      "name": "点赞",
+      "font_class": "dianzan",
+      "unicode": "e63b",
+      "unicode_decimal": 58939
+    },
+    {
+      "icon_id": "3878673",
+      "name": "音乐",
+      "font_class": "music",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
+      "icon_id": "4608957",
+      "name": "音乐",
+      "font_class": "yinle",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "11428241",
+      "name": "音乐列表-01",
+      "font_class": "yinleliebiao-",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "18965598",
+      "name": "播放MV",
+      "font_class": "bofangMV",
+      "unicode": "e6a3",
+      "unicode_decimal": 59043
+    },
+    {
+      "icon_id": "19663520",
+      "name": "播放",
+      "font_class": "play",
+      "unicode": "e664",
+      "unicode_decimal": 58980
+    }
+  ]
+}

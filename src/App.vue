@@ -1,28 +1,53 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Top></Top>
+    <Index></Index>
+    <Bottom :musicUrl="musicUrl"></Bottom>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Top from './components/Top.vue'
+import Index from './components/Index.vue'
+import Bottom from './components/Bottom.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Top,
+    Index,
+    Bottom
+  },
+  data(){
+    return {
+      musicUrl:""
+    }
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  *{
+    margin: 0;
+    padding: 0;
+  }
+
+  #app {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header {
+    height: 80px;
+  }
+
+  .bottom {
+    height: 100px;
+  }
+
+  .index {
+    flex: 1;
+  }
+
 </style>
