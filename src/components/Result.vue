@@ -115,6 +115,7 @@ export default {
                 case '歌曲':
                     this.total = 0
                     this.page = 1
+                    this.type = 1
                     this.pageSize = 10                      
                     this.getTableData()
                     break;
@@ -223,7 +224,9 @@ export default {
     watch:{
         $route(newVal){
             this.keywords = newVal.query.keywords
-            this.getTableData()
+            this.total = 0
+            this.page = 1                
+            this.getTableData(this.type)
         }
     }
 }
