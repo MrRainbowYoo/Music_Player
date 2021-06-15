@@ -39,15 +39,27 @@ export default {
   }
 
   .header {
-    height: 80px;
+    height: 60px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
   }
 
   .bottom {
-    height: 100px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
   }
 
   .index {
-    flex: 1;
+    position: fixed;
+    top: 60px;
+    bottom: 60px;
+    left: 0;
+    right: 0;
   }
 
 </style>

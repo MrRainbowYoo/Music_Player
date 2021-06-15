@@ -80,7 +80,7 @@ export default {
 
     main {
         flex: 1;
-        height: 800px;
+        /* height: 800px; */
         overflow-y: scroll;
         /* background-color: skyblue; */
     }
