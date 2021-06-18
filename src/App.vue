@@ -2,7 +2,7 @@
   <div id="app">
     <Top></Top>
     <Index></Index>
-    <Bottom :musicUrl="musicUrl"></Bottom>
+    <Bottom :musicUrl="musicUrl" :musicInfo="musicInfo"></Bottom>
   </div>
 </template>
 
@@ -20,7 +20,8 @@ export default {
   },
   data(){
     return {
-      musicUrl:""
+      musicUrl:"",
+      musicInfo:{}
     }
   }
 }

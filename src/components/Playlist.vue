@@ -1,5 +1,5 @@
 <template>
-    <div class="playlist">
+    <div class="playlist"  v-loading="loading">
         <div class="playlist-top-card">
             <div class="playlist-img-wrap">
                 <img :src="playlistInfo.coverImgUrl" alt="">
@@ -128,6 +128,7 @@
 <script>
 import axios from 'axios'
 import {formatDate,formatDateFully} from '../js/utils'
+// import func from 'vue-editor-bridge'
 
 export default {
     data(){
@@ -143,7 +144,8 @@ export default {
             total:0,
             pageSize:10,
             page:1,
-            playlistId:""
+            playlistId:"",
+            loading:true
         }
     },
     created(){
@@ -171,10 +173,21 @@ export default {
             }
             idsArray = idsArray.slice(1,21)//歌单歌曲的数量
             let idsStr = idsArray.join(",")
-            this.getTracks(idsStr)
 
-            // true 代表第一次加载评论
-            this.getComments(true)
+            // // 加载歌曲列表
+            // this.getTracks(idsStr)
+
+            // // true 代表第一次加载评论
+            // this.getComments(true)
+
+            // this.loading = false
+            
+            let that = this
+            Promise.all([this.getTracks(idsStr),this.getComments(true)]).then(()=>{
+                that.loading = false
+            })
+
+
         })
 
 
@@ -206,7 +219,7 @@ export default {
             })
         },
         play(row){
-        // console.log(row)
+        console.log(row)
         let id = row.id
         axios({
             url:"https://autumnfish.cn/song/url",
@@ -215,8 +228,24 @@ export default {
             id
             }
         }).then(res=>{
+            if(res.data.data[0].url){
+            // console.log(res)
             this.songUrl = res.data.data[0].url
             this.$parent.$parent.musicUrl = this.songUrl
+            // 传入歌曲信息
+            this.$parent.$parent.musicInfo = {
+                imgUrl:row.al.picUrl,
+                singer:row.ar[0].name,
+                songName:row.name
+            }
+
+            }else{
+                this.$message({
+                showClose: true,
+                message: '对不起，歌曲暂时无法播放。',
+                type: 'error'
+                });
+            }
         })
         },        
         getComments(isFirst=false){
@@ -237,7 +266,7 @@ export default {
                 
                 if(isFirst){
                     // alert('this is first')
-                    if(res.data.hasOwnProperty('hotComments')){
+                    if(Object.prototype.hasOwnProperty.call(res.data,'hotComments')){
                         for(let item of res.data.hotComments){
                             item.time = formatDateFully(new Date(item.time))
                         }

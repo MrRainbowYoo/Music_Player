@@ -145,8 +145,24 @@ export default {
                     id
                 }
             }).then(res=>{
-                let songUrl = res.data.data[0].url
-                this.$parent.$parent.musicUrl = songUrl
+                if(res.data.data[0].url){
+                // console.log(res)
+                this.songUrl = res.data.data[0].url
+                this.$parent.$parent.musicUrl = this.songUrl
+                // 传入歌曲信息
+                this.$parent.$parent.musicInfo = {
+                    imgUrl:row.imgUrl,
+                    singer:row.singer,
+                    songName:row.songName
+                }
+
+                }else{
+                    this.$message({
+                    showClose: true,
+                    message: '对不起，歌曲暂时无法播放。',
+                    type: 'error'
+                    });
+                }
             })
         },
         getTableData(type=1){

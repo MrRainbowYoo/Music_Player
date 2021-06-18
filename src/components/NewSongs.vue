@@ -1,5 +1,5 @@
 <template>
-  <div class="new-songs">
+  <div class="new-songs" v-loading="loading">
     <div class="songs-table">
       <el-table
           :data="tableData"
@@ -39,7 +39,8 @@ export default {
   data(){
     return {
       tableData :[],
-      songUrl:""
+      songUrl:"",
+      loading:true
     }
   },
   created(){
@@ -69,12 +70,13 @@ export default {
           }
           songsList.push(song)
       }
-      this.tableData = songsList      
+      this.tableData = songsList
+      this.loading = false      
     })
   },
   methods: {
     play(row){
-      // console.log(row)
+      console.log(row)
       let id = row.id
       axios({
         url:"https://autumnfish.cn/song/url",
@@ -83,8 +85,24 @@ export default {
           id
         }
       }).then(res=>{
-        this.songUrl = res.data.data[0].url
-        this.$parent.$parent.musicUrl = this.songUrl
+        if(res.data.data[0].url){
+          // console.log(res)
+          this.songUrl = res.data.data[0].url
+          this.$parent.$parent.musicUrl = this.songUrl
+          // 传入歌曲信息
+          this.$parent.$parent.musicInfo = {
+            imgUrl:row.imgUrl,
+            singer:row.singer,
+            songName:row.songName
+          }
+
+        }else{
+            this.$message({
+              showClose: true,
+              message: '对不起，歌曲暂时无法播放。',
+              type: 'error'
+            });
+        }
       })
     },
     // play(row) {

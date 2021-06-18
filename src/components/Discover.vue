@@ -25,7 +25,7 @@
                 <li v-for="(item,index) in newSongs" :key="index">
                     <div class="music-img-wrap">
                         <img :src="item.picUrl" alt="newSongs">
-                        <p class="iconfont icon-play" @click="playMusic(item.id)"></p>
+                        <p class="iconfont icon-play" @click="playMusic(item)"></p>
                     </div>
 
                     <div class="music-info">
@@ -112,18 +112,34 @@ export default {
         })
     },
     methods:{
-        playMusic(id){
-            // console.log(id)
+        playMusic(item){
+            console.log(item)
             axios({
                 url:"https://autumnfish.cn/song/url",
                 method:'get',
                 params:{
-                    id
+                    id:item.id
                 }
             }).then(res=>{
                 // console.log(res)
-                let musicUrl = res.data.data[0].url
-                this.$parent.$parent.musicUrl = musicUrl
+                if(res.data.data[0].url){
+                // console.log(res)
+                this.songUrl = res.data.data[0].url
+                this.$parent.$parent.musicUrl = this.songUrl
+                // 传入歌曲信息
+                this.$parent.$parent.musicInfo = {
+                    imgUrl:item.picUrl,
+                    singer:item.song.artists[0].name,
+                    songName:item.name
+                }
+
+                }else{
+                    this.$message({
+                    showClose: true,
+                    message: '对不起，歌曲暂时无法播放。',
+                    type: 'error'
+                    });
+                }
             })
         },
         toPlaylistDetail(id){
