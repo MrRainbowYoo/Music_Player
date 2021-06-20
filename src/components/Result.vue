@@ -139,7 +139,7 @@ export default {
             console.log(row)
             let id = row.id
             axios({
-                url:"https://autumnfish.cn/song/url",
+                url:this.URL+"/song/url",
                 method: "get",
                 params:{
                     id
@@ -168,7 +168,7 @@ export default {
         getTableData(type=1){
 
             axios({
-                url:"https://autumnfish.cn/search",
+                url:this.URL+"/search",
                 method:"get",
                 params:{
                     keywords:this.keywords,

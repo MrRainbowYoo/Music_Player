@@ -70,7 +70,7 @@ export default {
     created(){
         // 获取轮播图
         axios({
-            url:"https://autumnfish.cn/banner",
+            url:this.URL+"/banner",
             method:'get'
         }).then(res=>{
             // console.log(res)
@@ -79,7 +79,7 @@ export default {
 
         // 获取推荐歌单
         axios({
-            url:"https://autumnfish.cn/personalized",
+            url:this.URL+"/personalized",
             method:'get',
             params:{
                 limit:10
@@ -91,7 +91,7 @@ export default {
 
         // 获取最新音乐
         axios({
-            url:"https://autumnfish.cn/personalized/newsong",
+            url:this.URL+"/personalized/newsong",
             method:'get'
         }).then(res=>{
             // console.log(res)
@@ -100,7 +100,7 @@ export default {
 
         //获取推荐MV
         axios({
-            url:"https://autumnfish.cn/personalized/mv",
+            url:this.URL+"/personalized/mv",
             method:'get'
         }).then(res=>{
             // console.log(res)
@@ -115,7 +115,7 @@ export default {
         playMusic(item){
             console.log(item)
             axios({
-                url:"https://autumnfish.cn/song/url",
+                url:this.URL+"/song/url",
                 method:'get',
                 params:{
                     id:item.id

@@ -110,7 +110,7 @@ export default {
     },
     getMvList(changeTotal=false){
       axios({
-        url:"https://autumnfish.cn/mv/all",
+        url:this.URL+"/mv/all",
         method:'get',
         params:{
           area:this.region,

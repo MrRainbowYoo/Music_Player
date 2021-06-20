@@ -45,7 +45,7 @@ export default {
   },
   created(){
     axios({
-      url:'https://autumnfish.cn/top/song',
+      url:this.URL+'/top/song',
       method:'get',
       params:{
         type:0,
@@ -79,7 +79,7 @@ export default {
       console.log(row)
       let id = row.id
       axios({
-        url:"https://autumnfish.cn/song/url",
+        url:this.URL+"/song/url",
         method: "get",
         params:{
           id

@@ -98,7 +98,7 @@
 
 <script>
 import axios from 'axios'
-import {formatDateFully} from '../js/utils.js'
+import {formatDateFully} from '../utils/utils.js'
 
 export default {
     data(){
@@ -131,7 +131,7 @@ export default {
         },
         getComments(){
             axios({
-                url:"https://autumnfish.cn/comment/mv",
+                url:this.URL+"/comment/mv",
                 method:'get',
                 params:{
                     id:this.$route.query.id,
@@ -159,7 +159,7 @@ export default {
 
             // 获取mv播放url
             axios({
-                url:"https://autumnfish.cn/mv/url",
+                url:this.URL+"/mv/url",
                 method:'get',
                 params:{
                     id
@@ -171,7 +171,7 @@ export default {
 
             // 获取相关mv推荐
             axios({
-                url:"https://autumnfish.cn/simi/mv",
+                url:this.URL+"/simi/mv",
                 method:'get',
                 params:{
                     mvid:id
@@ -192,7 +192,7 @@ export default {
 
             // 获取MV信息
             axios({
-                url:"https://autumnfish.cn/mv/detail",
+                url:this.URL+"/mv/detail",
                 method:'get',
                 params:{
                     mvid:id
@@ -203,7 +203,7 @@ export default {
                 if(this.mvInfo.playCount >= 100000)
                     this.mvInfo.playCount = parseInt(this.mvInfo.playCount/10000)+'万'
                 axios({
-                    url:"https://autumnfish.cn/artists",
+                    url:this.URL+"/artists",
                     method:'get',
                     params:{
                         id:this.mvInfo.artistId

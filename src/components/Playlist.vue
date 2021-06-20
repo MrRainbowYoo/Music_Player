@@ -127,7 +127,7 @@
 
 <script>
 import axios from 'axios'
-import {formatDate,formatDateFully} from '../js/utils'
+import {formatDate,formatDateFully} from '../utils/utils'
 // import func from 'vue-editor-bridge'
 
 export default {
@@ -154,7 +154,7 @@ export default {
         this.playlistId = playlistId
 
         axios({
-            url:'https://autumnfish.cn/playlist/detail',
+            url:this.URL+'/playlist/detail',
             method:'get',
             params:{
                 id:playlistId
@@ -202,7 +202,7 @@ export default {
         },        
         getTracks(trackId){
             axios({
-                url:"https://autumnfish.cn/song/detail",
+                url:this.URL+"/song/detail",
                 method:'get',
                 params:{
                     ids:trackId
@@ -222,7 +222,7 @@ export default {
         console.log(row)
         let id = row.id
         axios({
-            url:"https://autumnfish.cn/song/url",
+            url:this.URL+"/song/url",
             method: "get",
             params:{
             id
@@ -250,7 +250,7 @@ export default {
         },        
         getComments(isFirst=false){
             axios({
-                url:'https://autumnfish.cn/comment/playlist',
+                url:this.URL+'/comment/playlist',
                 method:'get',
                 params:{
                     id:this.playlistId,

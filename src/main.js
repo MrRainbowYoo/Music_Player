@@ -4,8 +4,10 @@ import ElementUI from "element-ui"
 import VueRouter from "vue-router"
 import 'element-ui/lib/theme-chalk/index.css'
 import "./assets/icon/iconfont.css"
+import URL from './utils/globalAPI'
 
 Vue.config.productionTip = false
+Vue.prototype.URL = URL
 
 Vue.use(ElementUI)
 Vue.use(VueRouter)

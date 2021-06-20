@@ -75,7 +75,7 @@ export default {
     getHighQuality(cat='全部'){
         // 精品歌单
         axios({
-          url:'https://autumnfish.cn/top/playlist/highquality',
+          url:this.URL+'/top/playlist/highquality',
           method:'get',
           params:{
             limit:1,
@@ -89,7 +89,7 @@ export default {
     getSongLists(cat="全部"){
       // 歌单列表
       axios({
-        url:'https://autumnfish.cn/top/playlist',
+        url:this.URL+'/top/playlist',
         method:'get',
         params:{
           limit:10,
