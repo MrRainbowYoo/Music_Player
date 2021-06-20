@@ -98,7 +98,7 @@
 
 <script>
 import axios from 'axios'
-import {formatDateFully} from '../utils/utils.js'
+import {formatDateFully} from '@/utils/utils.js'
 
 export default {
     data(){

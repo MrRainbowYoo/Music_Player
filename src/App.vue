@@ -2,7 +2,8 @@
   <div id="app">
     <Top></Top>
     <Index></Index>
-    <Bottom :musicUrl="musicUrl" :musicInfo="musicInfo"></Bottom>
+    <SongDetail :show="show"></SongDetail>
+    <Bottom></Bottom>
   </div>
 </template>
 
@@ -10,18 +11,19 @@
 import Top from './components/Top.vue'
 import Index from './components/Index.vue'
 import Bottom from './components/Bottom.vue'
+import SongDetail from './components/SongDetail.vue'
 
 export default {
   name: 'App',
   components: {
     Top,
     Index,
-    Bottom
+    Bottom,
+    SongDetail
   },
   data(){
     return {
-      musicUrl:"",
-      musicInfo:{}
+      show:true
     }
   }
 }

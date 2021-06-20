@@ -88,13 +88,22 @@ export default {
         if(res.data.data[0].url){
           // console.log(res)
           this.songUrl = res.data.data[0].url
-          this.$parent.$parent.musicUrl = this.songUrl
-          // 传入歌曲信息
-          this.$parent.$parent.musicInfo = {
+          // this.$parent.$parent.musicUrl = this.songUrl
+          // // 传入歌曲信息
+          // this.$parent.$parent.musicInfo = {
+          //   imgUrl:row.imgUrl,
+          //   singer:row.singer,
+          //   songName:row.songName
+          // }
+
+          let musicInfo = {
             imgUrl:row.imgUrl,
             singer:row.singer,
-            songName:row.songName
+            songName:row.songName            
           }
+
+          this.$store.commit("changeMusicUrl",this.songUrl)
+          this.$store.commit("changeMusicInfo",musicInfo)          
 
         }else{
             this.$message({

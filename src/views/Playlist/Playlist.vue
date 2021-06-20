@@ -127,7 +127,7 @@
 
 <script>
 import axios from 'axios'
-import {formatDate,formatDateFully} from '../utils/utils'
+import {formatDate,formatDateFully} from '../../utils/utils'
 // import func from 'vue-editor-bridge'
 
 export default {
@@ -231,13 +231,22 @@ export default {
             if(res.data.data[0].url){
             // console.log(res)
             this.songUrl = res.data.data[0].url
-            this.$parent.$parent.musicUrl = this.songUrl
-            // 传入歌曲信息
-            this.$parent.$parent.musicInfo = {
+            // this.$parent.$parent.musicUrl = this.songUrl
+            // // 传入歌曲信息
+            // this.$parent.$parent.musicInfo = {
+            //     imgUrl:row.al.picUrl,
+            //     singer:row.ar[0].name,
+            //     songName:row.name
+            // }
+            
+            let musicInfo = {
                 imgUrl:row.al.picUrl,
                 singer:row.ar[0].name,
-                songName:row.name
+                songName:row.name                
             }
+
+            this.$store.commit("changeMusicUrl",this.songUrl)
+            this.$store.commit("changeMusicInfo",musicInfo)      
 
             }else{
                 this.$message({

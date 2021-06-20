@@ -1,16 +1,16 @@
 <template>
   <div class="bottom">
       <div class="music-box">
-        <div class="img-wrap">
-            <img :src="musicInfo.imgUrl ? musicInfo.imgUrl : defaultImg" alt="">
+        <div class="img-wrap el-icon-arrow-up" @click="toSongDetail()" title="打开音乐详情页">
+            <img :src="globalMusicInfo.imgUrl ? globalMusicInfo.imgUrl : defaultImg" alt="">
         </div>
-        <div class="music-info" v-show="musicInfo.songName">
-            <span class="music-name" :title="musicInfo.songName">{{musicInfo.songName}}</span>
-            <span class="music-singer" :title="musicInfo.singer">{{musicInfo.singer}}</span>
+        <div class="music-info" v-show="globalMusicInfo.songName">
+            <span class="music-name" :title="globalMusicInfo.songName">{{globalMusicInfo.songName}}</span>
+            <span class="music-singer" :title="globalMusicInfo.singer">{{globalMusicInfo.singer}}</span>
         </div>
-        <span class="music-name" v-show="!musicInfo.songName" style="line-height:50px">还没有播放音乐哦</span>
+        <span class="music-name" v-show="!globalMusicInfo.songName" style="line-height:50px">还没有播放音乐哦</span>
       </div>
-      <audio :src="musicUrl" autoplay controls></audio>
+      <audio :src="globalMusicUrl" autoplay controls></audio>
   </div>
 </template>
 
@@ -18,12 +18,27 @@
 export default {
     data(){
         return{
-            defaultImg: require("../imgs/defaultImg.png")
+            defaultImg: require("@/assets/imgs/defaultImg.png"),
+            musicUrl:""
         }
     },
     props:{
-        musicUrl:String,
-        musicInfo:Object
+        // 父组件传参，调用props算是方便的，但是子组件，孙组件通过this.$parent.$parent.xxx = 'xx'改变过于复杂，用Vuex优化
+        // musicUrl:String,
+        // musicInfo:Object
+    },
+    computed:{
+        globalMusicUrl(){
+            return this.$store.state.globalMusicUrl
+        },
+        globalMusicInfo(){
+            return this.$store.state.globalMusicInfo
+        }
+    },
+    methods:{
+        toSongDetail(){
+            this.$parent.show = !this.$parent.show
+        }
     }
 }
 </script>
@@ -54,6 +69,25 @@ export default {
         width: 50px;
         height: 50px;
         margin-right: 10px;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .music-box .img-wrap::before{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0,.3);
+        color: #fff;
+        border-radius: 5px;
+        display: none;
+    }
+
+    .music-box .img-wrap:hover::before{
+        display: flex;
     }
 
     .music-box .img-wrap img {
