@@ -1,31 +1,28 @@
 <template>
-    <div class="song-detail" v-show="!show">
-        <!-- <div class="bg" :style="{'background':'url('+globalMusicInfo.imgUrl+')'}"></div> -->
-        <i class="el-icon-arrow-down" @click="close"></i>
-        <div class="content">
-            <div class="img-box">
-                <img :src="playerBar" alt="" :class="{'player-bar isplay':!isMusicPaused,'player-bar':isMusicPaused}">
-                <div class="img-wrap-rotate">
-                    <img :src="globalMusicInfo.imgUrl?globalMusicInfo.imgUrl:defaultImgUrl" alt="" :class="{'running':!isMusicPaused,'paused':isMusicPaused}">
+    <transition leave-active-class="closeWindow">
+        <div class="song-detail" v-show="!show">
+            <i class="el-icon-arrow-down" @click="close"></i>
+            <div class="content">
+                <div class="img-box">
+                    <img :src="playerBar" alt="" :class="{'player-bar isplay':!isMusicPaused,'player-bar':isMusicPaused}">
+                    <div class="img-wrap-rotate">
+                        <img :src="globalMusicInfo.imgUrl?globalMusicInfo.imgUrl:defaultImgUrl" alt="" :class="{'running':!isMusicPaused,'paused':isMusicPaused}">
+                    </div>
                 </div>
-            </div>
-            
-            <div class="song-wrap">
-                <h2>{{globalMusicInfo.songName}}</h2>
-                <span class="song-info">{{globalMusicInfo.singer}}</span>
-                <div class="lyric-wrap">
-                    <el-scrollbar style="height:100%">
-                        <p v-for="(item,index) in lyric" :key="index" :class="{'active-lyric':currentIndex===index}">{{item.lyricWords}}</p>
-                    </el-scrollbar>
-                </div>
+                
+                <div class="song-wrap">
+                    <h2>{{globalMusicInfo.songName}}</h2>
+                    <span class="song-info">{{globalMusicInfo.singer}}</span>
+                    <div class="lyric-wrap">
+                        <el-scrollbar style="height:100%">
+                            <p v-for="(item,index) in lyric" :key="index" :class="{'active-lyric':currentIndex===index}">{{item.lyricWords}}</p>
+                        </el-scrollbar>
+                    </div>
 
-            </div>
-            <div class="others">
-                <p>123</p>
-                <p>456</p>
+                </div>
             </div>
         </div>
-    </div>
+    </transition>
 </template>
 
 <script>
@@ -136,39 +133,57 @@ export default {
     .song-detail {
         width: 100%;
         height: calc(100% - 60px);
-        /* background-color: #ecf0f1; */
-        background: linear-gradient(to bottom,#bdc3c7,rgb(231, 233, 235) 5%,#ecf0f1);
 
+        /* 歌词界面全屏 */
+        /* height: 100%;
+        z-index: 1; */
+
+        background: linear-gradient(to left top, rgb(60, 50, 62), rgb(77, 70, 88));
         position: fixed;
         top: 100%;
-        animation-duration: .5s;
-        animation-name: mask;
-        animation-fill-mode: forwards;
-    }
+        color: #fff;
 
-    .song-detail .bg{
-        height: 100%;
-        z-index: -2;
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: 50%;
-        -webkit-filter: blur(12px);
-        filter: blur(12px);
-        opacity: .7;
-        -webkit-transition: all .8s;
-        transition: all .8s;
-        -webkit-transform: scale(1.1);
-        transform: scale(1.1);
+        animation-duration: .5s;
+        animation-name: showWindow;
+        animation-fill-mode: forwards;
+        animation-timing-function: ease-out;        
     }
-    @keyframes mask {
+    @keyframes showWindow {
+        from{
+            top: 100%;
+        }
         to{
             top: 0;
         }
     }
 
+    @keyframes closeWindow {
+        from{
+            top: 0;
+        }
+        to{
+            top: 100%;
+        }
+    }    
+
+    .closeWindow {
+        animation-duration: .3s;
+        animation-name: closeWindow;
+        animation-fill-mode: forwards;
+        animation-timing-function: ease-out;
+    }
+
     .song-detail i{
         margin: 10px;
+        font-size: 23px;
         cursor: pointer;
+        opacity: .28;
+        padding: 5px;
+        border-radius: 50%;
+    }
+
+    .song-detail i:hover {
+        background-color: rgb(176, 174, 179);
     }
 
     .content {
@@ -177,7 +192,7 @@ export default {
     }
 
     .content .img-box {
-        width: 400px;
+        width: 50%;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -187,7 +202,7 @@ export default {
 
     .player-bar {
         position: absolute;
-        left: 200px;
+        left: 50%;
         top: -10px;
         z-index: 10;
         transform: rotate(-25deg);
@@ -209,8 +224,8 @@ export default {
 
     .img-wrap-rotate {
         position: relative;
-        width: 300px;
-        height: 300px;
+        width: 400px;
+        height: 400px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -258,42 +273,41 @@ export default {
 
     span.song-info {
         margin: 5px 0 60px 0;
-        font-size: 14px;
-        color: #545657;
+        font-size: 16px;
+        opacity: .28;
     }
 
     .song-wrap {
         flex: 1;
         display: flex;
         flex-direction: column;
-        align-items: center;
     }
 
     .song-wrap h2 {
         font-weight: normal;
+        font-size: 23px;
     }
 
     .lyric-wrap {
-        height: 500px;
-        text-align: center;
+        height: 600px;
         width: 80%;
     }
 
     .lyric-wrap p {
-        margin: 1rem 0;
-        font-size: 14px;
-        color: #545657;
+        padding: 18px;
+        font-size: 28px;
+        opacity: .28;
+        cursor: default;
+        border-radius: 12px;
+    }
+
+    .lyric-wrap p:hover {
+        background-color: rgb(176, 174, 179);
     }
 
     .active-lyric {
         font-weight: bold;
         font-size: 15px;
-        color: #2c3e50;
+        opacity: 1 !important;
     }
-
-    .others {
-        width: 20%;
-        margin-top: 120px;
-    }
-
 </style>
