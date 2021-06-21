@@ -1,7 +1,7 @@
 <template>
   <div class="bottom">
       <div class="music-box">
-        <div class="img-wrap el-icon-arrow-up" @click="toSongDetail()" title="打开音乐详情页">
+        <div class="img-wrap el-icon-arrow-up" @click="toSongDetail()" title="打开音乐详情页" onselectstart="return false">
             <img :src="globalMusicInfo.imgUrl ? globalMusicInfo.imgUrl : defaultImg" alt="">
         </div>
         <div class="music-info" v-show="globalMusicInfo.songName">
@@ -10,16 +10,18 @@
         </div>
         <span class="music-name" v-show="!globalMusicInfo.songName" style="line-height:50px">还没有播放音乐哦</span>
       </div>
-      <audio :src="globalMusicUrl" autoplay controls></audio>
+      <audio :src="globalMusicUrl" autoplay controls ref="audio" @timeupdate="updateTime" @canplay="getDuration" @pause="pauseStatus" @play="playStatus"></audio>
   </div>
 </template>
 
-<script>
+<script scoped>
+// import func from 'vue-editor-bridge'
 export default {
     data(){
         return{
             defaultImg: require("@/assets/imgs/defaultImg.png"),
-            musicUrl:""
+            musicUrl:"",
+            currentTime:0,
         }
     },
     props:{
@@ -33,12 +35,38 @@ export default {
         },
         globalMusicInfo(){
             return this.$store.state.globalMusicInfo
-        }
+        },
     },
     methods:{
         toSongDetail(){
-            this.$parent.show = !this.$parent.show
+            if(this.globalMusicUrl)
+                this.$parent.show = !this.$parent.show
+            else
+                this.$message({
+                    showClose: true,
+                    message: '还没有播放音乐哦',
+                    type: 'error'
+                });
+        },
+        updateTime(e){
+            // console.log(e.target.currentTime)
+            this.currentTime = e.target.currentTime
+        },
+        getDuration(){
+            // console.log(this.$refs.audio.duration)
+            // console.log(this.isMusicPaused)
+        },
+        pauseStatus(){
+            this.$store.state.isMusicPaused = true
+        },
+        playStatus(){
+            this.$store.state.isMusicPaused = false
         }
+    },
+    watch:{
+        currentTime(){
+            this.$store.commit('changeCurrentTime',this.currentTime)
+        },
     }
 }
 </script>

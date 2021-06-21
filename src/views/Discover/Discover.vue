@@ -123,13 +123,13 @@ export default {
             }).then(res=>{
                 // console.log(res)
                 if(res.data.data[0].url){
-                // console.log(res)
                 this.songUrl = res.data.data[0].url
 
                 let musicInfo = {
                     imgUrl:item.picUrl,
                     singer:item.song.artists[0].name,
-                    songName:item.name                    
+                    songName:item.name,
+                    id:item.id                    
                 }
                 this.$store.commit("changeMusicUrl",this.songUrl)
                 this.$store.commit("changeMusicInfo",musicInfo)

@@ -4,6 +4,12 @@ const mutations = {
     },
     changeMusicInfo(state,info){
         state.globalMusicInfo = info
+    },
+    changeCurrentTime(state,time){
+        state.globalCurrentTime = time
+    },
+    changeMusicStatus(state,status){
+        state.isMusicPaused = status
     }
 }
 

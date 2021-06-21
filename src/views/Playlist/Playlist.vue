@@ -242,7 +242,8 @@ export default {
             let musicInfo = {
                 imgUrl:row.al.picUrl,
                 singer:row.ar[0].name,
-                songName:row.name                
+                songName:row.name,
+                id:row.id              
             }
 
             this.$store.commit("changeMusicUrl",this.songUrl)

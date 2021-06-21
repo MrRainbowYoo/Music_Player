@@ -65,4 +65,9 @@ export default {
     right: 0;
   }
 
+  /* 去除scrollbar横向滚动条 */
+  .el-scrollbar__wrap {
+      overflow-x: hidden !important;
+  }
+
 </style>
