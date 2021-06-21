@@ -1,11 +1,11 @@
 @font-face {
   font-family: "iconfont"; /* Project id  */
-  src: url('iconfont.ttf?t=1623230872299') format('truetype');
+  src: url('iconfont.ttf?t=1624280410193') format('truetype');
 }
 
 .iconfont {
   font-family: "iconfont" !important;
-  /* font-size: 16px; */
+  /*font-size: 16px;*/
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -31,15 +31,31 @@
   content: "\e609";
 }
 
+.icon-shangyishou:before {
+  content: "\e63c";
+}
+
+.icon-xiayishou:before {
+  content: "\e63e";
+}
+
 .icon-yinleliebiao-:before {
   content: "\e60f";
+}
+
+.icon-zanting:before {
+  content: "\e887";
 }
 
 .icon-bofangMV:before {
   content: "\e6a3";
 }
 
-.icon-play:before {
+.icon-pause:before {
   content: "\e664";
+}
+
+.icon-play:before {
+  content: "\e665";
 }
 

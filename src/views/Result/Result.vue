@@ -19,6 +19,7 @@
                             <el-table-column prop="songName" label="音乐标题" width="">
                                 <template slot-scope="scope">
                                     <span>{{scope.row.songName}}</span>
+                                    <span v-if="scope.row.alia.length!=0" style="color:grey;fontSize:12px;marginLeft:5px">{{scope.row.alia[0]}}</span>
                                     <span class="iconfont icon-bofangMV mvIcon" v-if="scope.row.mvId != 0" @click="toMvDetail(scope.row.mvId)"></span>
                                 </template>
                             </el-table-column>
@@ -178,7 +179,7 @@ export default {
         getTableData(type=1){
 
             axios({
-                url:this.URL+"/search",
+                url:this.URL+"/cloudsearch",
                 method:"get",
                 params:{
                     keywords:this.keywords,
@@ -199,16 +200,19 @@ export default {
                         var songsList = []
 
                         for (const item of resultList) {
-                            var duration = item.duration
+                            var duration = item.dt
                             var min = parseInt(duration / 60000).toString().padStart(2,'0')
                             var second = parseInt((duration-min*60000)/1000).toString().padStart(2,'0')
                             duration = `${min}:${second}`
                             var song = {
                                 id:item.id,
                                 songName:item.name,
-                                singer:item.artists[0].name,
-                                album:item.album.name,
-                                mvId:item.mvid,
+                                singer:item.ar[0].name,
+                                album:item.al.name,
+                                mvId:item.mv,
+                                imgUrl:item.al.picUrl,
+                                alia:item.alia,
+                                copyright:item.copyright,
                                 duration
                             }
                             songsList.push(song)

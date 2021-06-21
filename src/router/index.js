@@ -9,6 +9,7 @@ import MVs from '@/views/MVs/MVs.vue'
 import Result from '@/views/Result/Result.vue'
 import Playlist from '@/views/Playlist/Playlist.vue'
 import MvDetail from '@/views/MvDetail/MvDetail.vue'
+import AudioChen from '@/components/AudioChen.vue'
 
 Vue.use(VueRouter)
 
@@ -50,6 +51,10 @@ const routes = [
   {
     path:'/mvdetail',
     component:MvDetail
+  },
+  {
+    path:'/audiochen',
+    component:AudioChen
   }
 ]
 

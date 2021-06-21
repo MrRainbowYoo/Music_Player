@@ -41,11 +41,32 @@
       "unicode_decimal": 58889
     },
     {
+      "icon_id": "8341784",
+      "name": "上一首",
+      "font_class": "shangyishou",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "8341786",
+      "name": "下一首",
+      "font_class": "xiayishou",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
       "icon_id": "11428241",
       "name": "音乐列表-01",
       "font_class": "yinleliebiao-",
       "unicode": "e60f",
       "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "17782644",
+      "name": "暂停",
+      "font_class": "zanting",
+      "unicode": "e887",
+      "unicode_decimal": 59527
     },
     {
       "icon_id": "18965598",
@@ -55,11 +76,18 @@
       "unicode_decimal": 59043
     },
     {
+      "icon_id": "19663518",
+      "name": "暂停",
+      "font_class": "pause",
+      "unicode": "e664",
+      "unicode_decimal": 58980
+    },
+    {
       "icon_id": "19663520",
       "name": "播放",
       "font_class": "play",
-      "unicode": "e664",
-      "unicode_decimal": 58980
+      "unicode": "e665",
+      "unicode_decimal": 58981
     }
   ]
 }

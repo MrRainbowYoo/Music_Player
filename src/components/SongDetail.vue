@@ -66,10 +66,11 @@ export default {
                     // 截取歌词,正则表达式去除[]及其包括的内容
                     let lyricWords = item.replace(/\[.*?\]/g,'')
                     // let lyricWords = item.slice(end+1).trim()
-                    lyric.push({
-                        currentTime,
-                        lyricWords
-                    })
+                    if(lyricWords)
+                        lyric.push({
+                            currentTime,
+                            lyricWords
+                        })
                 }
                 this.lyric = lyric
             })
@@ -87,7 +88,7 @@ export default {
                     this.currentIndex = i
                     let _view = document.querySelector(".el-scrollbar__view")
                     // let top = parseInt(window.getComputedStyle(_view).top)
-                    _view.style.transform = `translate3d(0,${80 - i * 27}px,0)`
+                    _view.style.transform = `translate3d(0,${80 - i * 73}px,0)`
                 }
             }
         }
