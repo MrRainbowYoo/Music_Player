@@ -10,12 +10,14 @@
         </div>
         <span class="music-name" v-show="!globalMusicInfo.songName" style="line-height:50px">还没有播放音乐哦</span>
       </div>
-      <audio :src="globalMusicUrl" autoplay controls ref="audio" @timeupdate="updateTime" @canplay="getDuration" @pause="pauseStatus" @play="playStatus"></audio>
+      <AudioChen :musicUrl="globalMusicUrl" @timeupdate="updateTime" @play="playStatus" @pause="pauseStatus"></AudioChen>
+      <!-- <audio :src="globalMusicUrl" autoplay controls ref="audio" @timeupdate="updateTime" @pause="pauseStatus" @play="playStatus"></audio> -->
   </div>
 </template>
 
 <script scoped>
 // import func from 'vue-editor-bridge'
+import AudioChen from './AudioChen.vue'
 export default {
     data(){
         return{
@@ -23,6 +25,9 @@ export default {
             musicUrl:"",
             currentTime:0,
         }
+    },
+    components:{
+        AudioChen
     },
     props:{
         // 父组件传参，调用props算是方便的，但是子组件，孙组件通过this.$parent.$parent.xxx = 'xx'改变过于复杂，用Vuex优化
@@ -35,7 +40,7 @@ export default {
         },
         globalMusicInfo(){
             return this.$store.state.globalMusicInfo
-        },
+        }
     },
     methods:{
         toSongDetail(){
@@ -52,15 +57,15 @@ export default {
             // console.log(e.target.currentTime)
             this.currentTime = e.target.currentTime
         },
-        getDuration(){
-            // console.log(this.$refs.audio.duration)
-            // console.log(this.isMusicPaused)
-        },
         pauseStatus(){
-            this.$store.state.isMusicPaused = true
+            this.$store.commit('changeMusicStatus',true)
+            console.log('pause~~~~~~~~~~~')
+            // this.$store.state.isMusicPaused = true
         },
         playStatus(){
-            this.$store.state.isMusicPaused = false
+            this.$store.commit('changeMusicStatus',false)
+            console.log('play~~~~~~~~~~~')
+            // this.$store.state.isMusicPaused = false
         }
     },
     watch:{

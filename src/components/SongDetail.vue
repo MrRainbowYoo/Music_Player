@@ -14,9 +14,10 @@
                     <h2>{{globalMusicInfo.songName}}</h2>
                     <span class="song-info">{{globalMusicInfo.singer}}</span>
                     <div class="lyric-wrap">
-                        <el-scrollbar style="height:100%">
+                        <el-scrollbar style="height:100%" v-if="hasLyric">
                             <p v-for="(item,index) in lyric" :key="index" :class="{'active-lyric':currentIndex===index}">{{item.lyricWords}}</p>
                         </el-scrollbar>
+                        <p v-if="!hasLyric">抱歉，暂无歌词</p>
                     </div>
 
                 </div>
@@ -33,7 +34,8 @@ export default {
             playerBar:require("../assets/imgs/player_bar.png"),
             defaultImgUrl:require("@/assets/imgs/defaultImg.png"),
             lyric:[],
-            currentIndex:0
+            currentIndex:0,
+            hasLyric:true
         }
     },
     props:{
@@ -51,28 +53,35 @@ export default {
                     id
                 }
             }).then(res=>{
-                // console.log(res)
-                // console.log(res.data.lrc.lyric)
-                let lyricStr = res.data.lrc.lyric
-                let lyricList = lyricStr.split("\n")
-                let lyric = []
-                for(let item of lyricList){
-                    // console.log(item)
-                    // 截取时间 去掉[]
-                    let end = item.indexOf(']')
-                    let time = item.slice(1,end)
-                    let currentTime = this.timeFormat(time)
-
-                    // 截取歌词,正则表达式去除[]及其包括的内容
-                    let lyricWords = item.replace(/\[.*?\]/g,'')
-                    // let lyricWords = item.slice(end+1).trim()
-                    if(lyricWords)
-                        lyric.push({
-                            currentTime,
-                            lyricWords
-                        })
+                console.log(res)
+                let _this = this
+                if(!Object.hasOwnProperty.call(res.data,'lrc')){
+                    _this.hasLyric = false
                 }
-                this.lyric = lyric
+                else{
+                    this.hasLyric = true
+                    let lyricStr = res.data.lrc.lyric
+                    let lyricList = lyricStr.split("\n")
+                    let lyric = []
+                    for(let item of lyricList){
+                        // console.log(item)
+                        // 截取时间 去掉[]
+                        let end = item.indexOf(']')
+                        let time = item.slice(1,end)
+                        let currentTime = this.timeFormat(time)
+
+                        // 截取歌词,正则表达式去除[]及其包括的内容
+                        let lyricWords = item.replace(/\[.*?\]/g,'')
+                        // let lyricWords = item.slice(end+1).trim()
+                        if(lyricWords)
+                            lyric.push({
+                                currentTime,
+                                lyricWords
+                            })
+                    }
+                    this.lyric = lyric
+                }
+                // console.log(res.data.lrc.lyric)
             })
         },
         timeFormat(time){
@@ -88,7 +97,7 @@ export default {
                     this.currentIndex = i
                     let _view = document.querySelector(".el-scrollbar__view")
                     // let top = parseInt(window.getComputedStyle(_view).top)
-                    _view.style.transform = `translate3d(0,${80 - i * 73}px,0)`
+                    _view.style.transform = `translate3d(0,${80 - i * 73}px,0)` //还是会存在bug，歌词会自动滚动，滚动条不会，导致无法上拉显示已经放过的歌词。
                 }
             }
         }
@@ -113,7 +122,8 @@ export default {
             }
         },
         globalCurrentTime(){
-            this.lryicActive(this.globalCurrentTime)
+            if(this.hasLyric) //解决没有歌词仍会滚动的bug
+                this.lryicActive(this.globalCurrentTime)
         }
     }
 }

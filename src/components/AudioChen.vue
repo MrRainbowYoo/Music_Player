@@ -1,19 +1,41 @@
 <template>
   <div class="audio-wrap">
-      <audio :src="testUrl" controls ref="audio" style="position: absolute;top: 166px;" @canplay="getDuration" @timeupdate="updateTime"></audio>
-      <div class="audio-btns">
+    <audio :src="musicUrl"
+     controls 
+     autoplay 
+     ref="audio" 
+     style="display:none" 
+     @canplay="getDuration" 
+     @timeupdate="updateTime"
+     @ended="onEnded" 
+     您的浏览器不支持audio标签></audio>
+    <div class="audio-left">
+        <div class="audio-btns">
         <span class="iconfont icon-shangyishou" title="上一首"></span>
-        <span class="iconfont icon-play" title="播放" v-if="isPlay" @click="changeStatus('play')"></span>
-        <span class="iconfont icon-pause" title="暂停" v-if="!isPlay" @click="changeStatus('pause')"></span>        
+        <span class="iconfont icon-play" title="播放" v-if="!isPaused" @click="changeStatus('play')"></span>
+        <span class="iconfont icon-pause" title="暂停" v-if="isPaused" @click="changeStatus('pause')"></span>        
         <span class="iconfont icon-xiayishou" title="下一首"></span>
-      </div>
-      <div class="audio-progress">
-        <span>{{formatCurrentTime}}</span>
-        <div class="block">
-            <el-slider v-model="currentTime"  :max="duration" :step=0.1 :show-tooltip="true" @change="changeCurrentTime"></el-slider>
         </div>
-        <span>{{formatDuration}}</span>
-      </div>
+
+        <div class="audio-progress">
+            <span>{{currentTime | timeFormat}}</span>
+            <div class="block">
+                <el-slider v-model="currentTime"  :max="duration" :show-tooltip="false" @change="changeCurrentTime" @mousedown.native="isDrag = true" @mouseup.native="isDrag = false"></el-slider>
+            </div>
+            <span>{{duration | timeFormat}}</span>
+        </div>
+    </div>
+
+    <div class="audio-right">
+        <div class="slot"></div>
+        <div class="audio-voice">
+            <span class="iconfont icon-yinliang" v-if="voice" @click="voice=0"></span>
+            <span class="iconfont icon-jingyin" v-if="!voice" @click="voice=(cacheVoice==0?0.7:cacheVoice)"></span>
+            <div class="block">
+                <el-slider v-model="voice" :max=1 :step=0.1 :show-tooltip="true" @input="changeVolume" @change="changeCacheVolume" :format-tooltip="formatTooltip"></el-slider>
+            </div>
+        </div>
+    </div>
   </div>
 </template>
 
@@ -21,45 +43,85 @@
 export default {
     data(){
         return {
-            testUrl:'http://m701.music.126.net/20210621223805/6a71ddc63b2ec573233d77e76aa74af1/jdyyaac/obj/w5rDlsOJwrLDjj7CmsOj/4241278161/6433/0bc5/0015/bcd6d720987c4346233c685caeac17a3.m4a',
+            testUrl:'http://m7.music.126.net/20210622181529/e65e5cb804152f23c9e3bd59bdccf90b/ymusic/a530/f2cc/c82e/b8b5b240d9fce9ac549b3649464926a9.mp3',
             currentTime:0,
-            formatCurrentTime:"00:00",
             duration:0,
-            formatDuration:"00:00",
-            isPlay:true
+            isPaused:false,
+            isDrag:false, //添加判断是否拖拽，可解决拖动超过1s出现的bug
+            voice:0.7,
+            cacheVoice:0.7
         }
+    },
+    props:{
+        musicUrl:String
     },
     methods:{
         changeStatus(option){
-            this.isPlay = !this.isPlay
             if(option=='play'){
-                this.$refs.audio.play()
+                if(this.musicUrl){
+                    this.isPaused = !this.isPaused
+                    this.$refs.audio.play()
+                    this.$emit('play')
+                }else {
+                    this.$message({
+                        type:'error',
+                        message:'还没有播放音乐哦',
+                        showClose:true
+                    })
+                }
             }else{
+                this.isPaused = !this.isPaused
                 this.$refs.audio.pause()
+                this.$emit('pause')
             }
         },
         changeCurrentTime(){
-            // console.log(this.currentTime)
-            this.$refs.audio.currentTime = this.currentTime //点击可以，拖动不行出bug
+            // 存在拖动进度条歌词不随着滚动的bug
+            this.$refs.audio.currentTime = this.currentTime
+            this.isDrag = false
         },
         updateTime(e){
-            console.log(e.target.currentTime)
-            this.currentTime = e.target.currentTime
+            // console.log(e.target.currentTime)
+            if(!this.isDrag){
+                this.currentTime = e.target.currentTime
+                this.$emit('timeupdate',event)
+            }
         },
         getDuration(e){
-            console.log(e.target.duration)
+            // console.log(e.target.duration)
             this.duration = e.target.duration
-            this.formatDuration = this.timeFormat(this.duration)
+            this.isPaused = true
+            this.$emit('play')
         },
+        changeVolume(){
+            this.$refs.audio.volume = this.voice
+        },
+        changeCacheVolume(){
+            // 设置缓存音量,点击静音恢复至该音量，如缓存也为0，恢复默认0.7
+            this.cacheVoice = this.voice
+        },
+        formatTooltip(val) {
+            return val*100+"%";
+        },
+        onEnded(){
+            this.isPaused = false
+            this.$emit('pause')
+        }
+
+    },
+    filters:{
         timeFormat(time){
             let min = parseInt(time / 60).toString().padStart(2,'0')
             let second = parseInt(time-min*60).toString().padStart(2,'0')
             return min+":"+second
-        }
+        },
     },
     watch:{
-        currentTime(){
-            this.formatCurrentTime = this.timeFormat(this.currentTime)
+        voice(){
+            if(!this.voice){
+                this.$refs.audio.muted = true
+            }else
+                this.$refs.audio.muted = false
         }
     }
 }
@@ -68,11 +130,18 @@ export default {
 <style>
     .audio-wrap {
         width: 500px;
-        height: 100px;
-        margin: 50px auto; /* 封装后删除 */
+        min-width: 400px;
+        height: 100%;
+        margin: 0 auto;
+        /* margin: 50px auto; 封装后删除 */
         padding: 10px;
-        border: 1px solid #333;
+        /* border: 1px solid #333; */
         box-sizing: border-box;
+        display: flex;
+    }
+
+    .audio-left {
+        flex: 1;
     }
 
     .audio-btns {
@@ -94,7 +163,7 @@ export default {
     .audio-btns span:hover {
         background-color: #ecf0f1;
     }
-    
+
     .audio-progress{
         display: flex;
         align-items: center;
@@ -105,18 +174,38 @@ export default {
         color: #bdc3c7;
     }
 
-    .audio-progress .block {
+    .block {
         flex: 1;
         margin: 0 10px;
     }
     
     .el-slider__bar {
-        background-color: rgb(225, 62, 62);
+        background-color: rgb(225, 62, 62) !important;
     }
 
     .el-slider__button {
-        border-color: rgb(225, 62, 62);
-        width: 8px;
-        height: 8px;
+        border-color: rgb(225, 62, 62) !important;
+        width: 8px !important;
+        height: 8px !important;
+    }
+
+    .audio-right {
+        width: 20%;
+        min-width: 100px;
+        margin-left: 50px;
+    }
+
+    .slot {
+        height: 50%;
+    }
+
+    .audio-voice {
+        display: flex;
+        align-items: center;
+    }
+
+    .audio-voice span {
+        cursor: pointer;
+        margin-right: 10px; /* 远离音量条，防止误触 */
     }
 </style>
