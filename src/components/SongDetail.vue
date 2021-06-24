@@ -14,7 +14,7 @@
                     <h2>{{globalMusicInfo.songName}}</h2>
                     <span class="song-info">{{globalMusicInfo.singer}}</span>
                     <div class="lyric-wrap">
-                        <el-scrollbar style="height:100%" v-if="hasLyric">
+                        <el-scrollbar style="height:100%" v-if="hasLyric" ref="scroll">
                             <p v-for="(item,index) in lyric" :key="index" :class="{'active-lyric':currentIndex===index}">{{item.lyricWords}}</p>
                         </el-scrollbar>
                         <p v-if="!hasLyric">抱歉，暂无歌词</p>
@@ -28,6 +28,7 @@
 
 <script>
 import axios from 'axios'
+
 export default {
     data(){
         return {
@@ -35,7 +36,7 @@ export default {
             defaultImgUrl:require("@/assets/imgs/defaultImg.png"),
             lyric:[],
             currentIndex:0,
-            hasLyric:true
+            hasLyric:true,
         }
     },
     props:{
@@ -94,10 +95,17 @@ export default {
             for(let i=0;i<this.lyric.length;i++){
                 if(this.lyric[i].currentTime == Math.ceil(time)){
                     // console.log(`第${i}句，时间为${this.lyric[i].currentTime},${this.lyric[i].lyricWords}`)
-                    this.currentIndex = i
-                    let _view = document.querySelector(".el-scrollbar__view")
+
+
+                    // let _view = document.querySelector(".lyric-wrap .el-scrollbar__view")
                     // let top = parseInt(window.getComputedStyle(_view).top)
-                    _view.style.transform = `translate3d(0,${80 - i * 73}px,0)` //还是会存在bug，歌词会自动滚动，滚动条不会，导致无法上拉显示已经放过的歌词。
+                    // _view.style.transform = `translate3d(0,${80 - i * 73}px,0)` //还是会存在bug，歌词会自动滚动，滚动条不会，导致无法上拉显示已经放过的歌词。
+
+                    // 可实现歌词垂直居中
+                    let _p = document.querySelector('.active-lyric')
+                    let _pOffsetTop = _p.offsetTop
+                    this.$refs['scroll'].wrap.scrollTop = _pOffsetTop-_p.offsetHeight*3  //想滚到哪个高度，就写多少
+                    this.currentIndex = i
                 }
             }
         }
@@ -134,11 +142,13 @@ export default {
         list-style: none;
     }
 
-    .el-scrollbar__view {
+    .lyric-wrap .el-scrollbar__view {
         position: relative;
+        padding: 100px 0 300px 0;
 
-        transform: translate3d(0,80px,0);
-        transition: .6s ease-out;
+        /* 已设置滚动条滚动到自定义位置，下方效果取消 */
+        /* transform: translate3d(0,80px,0);
+        transition: .6s ease-out; */
     }
 
     .song-detail {

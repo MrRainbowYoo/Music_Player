@@ -3,6 +3,9 @@
     <Top></Top>
     <Index></Index>
     <SongDetail :show="show"></SongDetail>
+    <transition name="fade">
+      <Queue v-show="!showQueue"></Queue>
+    </transition>
     <Bottom></Bottom>
   </div>
 </template>
@@ -12,6 +15,7 @@ import Top from './components/Top.vue'
 import Index from './components/Index.vue'
 import Bottom from './components/Bottom.vue'
 import SongDetail from './components/SongDetail.vue'
+import Queue from './components/Queue.vue'
 
 export default {
   name: 'App',
@@ -19,11 +23,13 @@ export default {
     Top,
     Index,
     Bottom,
-    SongDetail
+    SongDetail,
+    Queue
   },
   data(){
     return {
-      show:true
+      show:true,
+      showQueue:false
     }
   }
 }
@@ -68,6 +74,13 @@ export default {
   /* 去除scrollbar横向滚动条 */
   .el-scrollbar__wrap {
       overflow-x: hidden !important;
+  }
+
+  .fade-enter-active, .fade-leave-active {
+      transition: transform .5s
+  }
+  .fade-enter, .fade-leave-active {
+    transform: translate3d(0,100%,0);
   }
 
 </style>

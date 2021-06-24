@@ -112,6 +112,11 @@ export default {
         })
     },
     methods:{
+        timeFormat(time){
+            let min = parseInt(time / 60000).toString().padStart(2,'0')
+            let second = parseInt((time-min*60000)/1000).toString().padStart(2,'0')
+            return min+":"+second
+        },
         playMusic(item){
             console.log(item)
             axios({
@@ -129,7 +134,8 @@ export default {
                     imgUrl:item.picUrl,
                     singer:item.song.artists[0].name,
                     songName:item.name,
-                    id:item.id                    
+                    id:item.id,
+                    duration:this.timeFormat(item.song.duration)                    
                 }
                 this.$store.commit("changeMusicUrl",this.songUrl)
                 this.$store.commit("changeMusicInfo",musicInfo)
@@ -235,7 +241,7 @@ export default {
   }
 
   .list li::before {
-      content: "\e664"; 
+      content: "\e665"; 
       position: absolute;
       bottom: 25px;
       right: 5px;
@@ -309,7 +315,7 @@ export default {
     }
 
   .music-img-wrap p::before {
-      content: "\e664"; 
+      content: "\e665"; 
       position: absolute;
       top: 50%;
       left: 50%;
@@ -362,7 +368,7 @@ export default {
   }
 
   .mv-img-wrap .play::before {
-      content: "\e664"; 
+      content: "\e665"; 
       position: absolute;
       top: 50%;
       left: 50%;

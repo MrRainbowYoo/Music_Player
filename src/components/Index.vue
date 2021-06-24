@@ -17,7 +17,9 @@
           </ul>
       </div>
       <main>
-          <router-view></router-view>
+          <el-scrollbar style="height:100%">
+            <router-view></router-view>
+          </el-scrollbar>
       </main>
   </div>
 </template>
@@ -81,7 +83,7 @@ export default {
     main {
         flex: 1;
         /* height: 800px; */
-        overflow-y: scroll;
+        /* overflow-y: scroll; */
         /* background-color: skyblue; */
     }
 </style>

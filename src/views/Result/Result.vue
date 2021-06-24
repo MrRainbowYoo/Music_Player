@@ -161,7 +161,8 @@ export default {
                     imgUrl:row.imgUrl,
                     singer:row.singer,
                     songName:row.songName,
-                    id:row.id                    
+                    id:row.id,
+                    duration:row.duration                    
                 }
 
                 this.$store.commit("changeMusicUrl",this.songUrl)
@@ -361,7 +362,7 @@ export default {
   }
 
   .list li::before {
-      content: "\e664"; 
+      content: "\e665"; 
       position: absolute;
       bottom: 25px;
       right: 5px;
@@ -430,7 +431,7 @@ export default {
   }
 
   .mv-img-wrap .play::before {
-      content: "\e664"; 
+      content: "\e665"; 
       position: absolute;
       top: 50%;
       left: 50%;

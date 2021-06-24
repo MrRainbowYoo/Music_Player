@@ -76,6 +76,13 @@
       "unicode_decimal": 59043
     },
     {
+      "icon_id": "19654124",
+      "name": "音乐列表",
+      "font_class": "yinleliebiao",
+      "unicode": "e7fe",
+      "unicode_decimal": 59390
+    },
+    {
       "icon_id": "19663518",
       "name": "暂停",
       "font_class": "pause",

@@ -258,7 +258,7 @@ export default {
   }
 
   .list li::before {
-      content: "\e664"; 
+      content: "\e665"; 
       position: absolute;
       bottom: 25px;
       right: 5px;

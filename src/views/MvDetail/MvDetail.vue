@@ -335,7 +335,7 @@ ul {
   }
 
   .mv-img-wrap .play::before {
-      content: "\e664"; 
+      content: "\e665"; 
       position: absolute;
       top: 50%;
       left: 50%;

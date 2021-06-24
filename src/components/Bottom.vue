@@ -12,6 +12,10 @@
       </div>
       <AudioChen :musicUrl="globalMusicUrl" @timeupdate="updateTime" @play="playStatus" @pause="pauseStatus"></AudioChen>
       <!-- <audio :src="globalMusicUrl" autoplay controls ref="audio" @timeupdate="updateTime" @pause="pauseStatus" @play="playStatus"></audio> -->
+      <div class="bofangliebiao" title="播放队列" @click="showQueue">
+          <span class="iconfont icon-yinleliebiao"></span>
+          <span>13</span>
+      </div>
   </div>
 </template>
 
@@ -59,19 +63,29 @@ export default {
         },
         pauseStatus(){
             this.$store.commit('changeMusicStatus',true)
-            console.log('pause~~~~~~~~~~~')
+            // console.log('pause~~~~~~~~~~~')
             // this.$store.state.isMusicPaused = true
         },
         playStatus(){
             this.$store.commit('changeMusicStatus',false)
-            console.log('play~~~~~~~~~~~')
+            // console.log('play~~~~~~~~~~~')
             // this.$store.state.isMusicPaused = false
+        },
+        showQueue(){
+            this.$parent.showQueue = !this.$parent.showQueue
         }
     },
     watch:{
         currentTime(){
             this.$store.commit('changeCurrentTime',this.currentTime)
         },
+        globalMusicInfo(){
+            let obj = {
+                musicUrl:this.globalMusicUrl,
+                ...this.globalMusicInfo
+            }
+            this.$store.commit('changeMusicQueue',obj)
+        }
     }
 }
 </script>
@@ -147,4 +161,17 @@ export default {
         white-space: nowrap;
     }
 
+    .bofangliebiao{
+        margin-right: 100px;
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+    .bofangliebiao span:nth-of-type(1){
+        font-size: 22px;
+    }
+
+    .bofangliebiao span:nth-of-type(2) {
+
+    }
 </style>

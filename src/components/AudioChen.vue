@@ -129,13 +129,11 @@ export default {
 
 <style>
     .audio-wrap {
-        width: 500px;
+        width: 600px;
         min-width: 400px;
         height: 100%;
         margin: 0 auto;
-        /* margin: 50px auto; 封装后删除 */
         padding: 10px;
-        /* border: 1px solid #333; */
         box-sizing: border-box;
         display: flex;
     }

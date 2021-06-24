@@ -9,7 +9,8 @@ const store = new Vuex.Store({
         globalMusicUrl:"",
         globalMusicInfo:{},
         globalCurrentTime:0,
-        isMusicPaused:true
+        isMusicPaused:true,
+        musicQueue:[]
     },
     mutations
 })
