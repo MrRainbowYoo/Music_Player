@@ -9,7 +9,13 @@
                 </div>
                 <ul class="queue-wrap">
                     <el-scrollbar style="height:100%">
-                    <li class="queue-song" v-for="item in musicQueue" :key="item.id" @dblclick="play(item)">
+                    <li class="queue-song" v-for="item in musicQueue" :key="item.id" @dblclick="play(item)" :class="{'active-song':item.id==globalMusicInfo.id}">
+                        <div class="playingIcon" v-show="item.id==globalMusicInfo.id && !isMusicPaused">
+                            <div class="playingIcon1"></div>
+                            <div class="playingIcon2"></div>
+                            <div class="playingIcon3"></div>
+                        </div>
+                        <span :class="{'playingIcon iconfont icon-zanting':isMusicPaused && item.id==globalMusicInfo.id}"></span>
                         <span class="queue-song-name">{{item.songName}}</span>
                         <span class="queue-song-singer">{{item.singer}}</span>
                         <span class="queue-song-duration">{{item.duration}}</span>
@@ -26,6 +32,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
     data(){
         return {
@@ -38,7 +46,22 @@ export default {
       },
       deleteQueue(id){
         //   console.log(id)
-          this.$store.commit('deleteMusic',id)
+        this.$confirm('确定删除该歌曲吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+            this.$store.commit('deleteMusic',id)
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
       },
       clearMusicQueue(){
         if(this.musicQueue.length == 0)
@@ -47,18 +70,74 @@ export default {
                 type:'warning',
                 showClose:true
             })
-        else
+        else{
+        this.$confirm('确定清空列表吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
           this.$store.commit('clearMusicQueue')
+          this.$message({
+            type: 'success',
+            message: '已清空!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消清空'
+          });          
+        });            
+        }
       },
       play(item){
           console.log(item)
-          this.$store.commit('changeMusicUrl',item.musicUrl)
-          this.$store.commit('changeMusicInfo',item.musicInfo)
+            axios({
+                url:this.URL+"/song/url",
+                method: "get",
+                params:{
+                id:item.id
+                }
+            }).then(res=>{
+                if(res.data.data[0].url){
+                let songUrl = res.data.data[0].url
+                let musicInfo = {
+                    id:item.id,
+                    imgUrl:item.imgUrl,
+                    songName:item.songName,
+                    singer:item.singer,
+                    duration:item.duration
+                }
+                this.$store.commit("changeMusicUrl",songUrl)
+                this.$store.commit("changeMusicInfo",musicInfo)          
+
+                }else{
+                    this.$message({
+                    showClose: true,
+                    message: '对不起，歌曲暂时无法播放。',
+                    type: 'error'
+                    });
+                }
+            })
+
       }
     },
     computed:{
         musicQueue(){
             return this.$store.state.musicQueue
+        },
+        globalMusicInfo(){
+            return this.$store.state.globalMusicInfo
+        },
+        isMusicPaused(){
+            return this.$store.state.isMusicPaused
+        },
+        nowIndex(){
+            return this.$store.state.nowIndex
+        }
+    },
+    watch:{
+        nowIndex(){
+            this.play(this.musicQueue[this.nowIndex])
         }
     }
 }
@@ -77,7 +156,6 @@ export default {
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
         background-color: #fff;
-        padding: 20px;
         box-sizing: border-box;
         font-size: 14px;
     }
@@ -86,10 +164,14 @@ export default {
         font-size: 14px;
     }
 
+    .queue-tabs .el-tabs__header {
+        margin: 15px;
+    }
+
     .queue-head {
         color: #bdc3c7;
         padding-bottom: 10px;
-        margin: 10px 0;
+        margin: 10px 15px;
         border-bottom: 1px solid #eee;
     }
 
@@ -121,11 +203,68 @@ export default {
         color: #363636;
     }
 
+    .playingIcon {
+        width: 14px;
+        height: 14px;
+        overflow: hidden;
+        display: flex;
+        position: absolute;
+        left: 5px;
+        font-weight: bold;
+    }
+
+    .playingIcon div{
+        background-color: rgb(236, 65, 65);
+        width: 4px;
+        margin: 0 1px;
+        height: 100%;
+    }
+
+    .playingIcon1 {
+        /* transform: translate3d(0,0,0); */
+        animation: playingIcon;
+        animation-duration: .5s;
+        animation-delay: 0;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-out;
+        animation-direction: alternate-reverse;
+    }
+
+    .playingIcon2 {
+        /* transform: translate3d(0,4px,0); */
+        animation: playingIcon;
+        animation-duration: .5s;
+        animation-delay: .2s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-out;
+        animation-direction: alternate-reverse;
+    }
+
+    .playingIcon3 {
+        /* transform: translate3d(0,8px,0); */
+        animation: playingIcon;
+        animation-duration: .5s;
+        animation-delay: .5s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-out;
+        animation-direction: alternate-reverse;
+    }
+
+    @keyframes playingIcon {
+        from{
+            transform: translate3d(0,0,0);
+        }
+        to{
+            transform: translate3d(0,80%,0);
+        }
+    }
+
+
     .queue-song:nth-of-type(even) {
         background-color: #f9f9f9;
     }
 
-    .queue-song:hover {
+    .queue-song:not(.active-song):hover {
         background-color: #f5f6fa;
         color: #0097e6;
     }
@@ -135,14 +274,15 @@ export default {
     }
 
     .queue-song-name {
-        width: 50%;
+        width: 40%;
+        margin-left: 25px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
 
     .queue-song-singer {
-        width: 25%;
+        width: 30%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -157,5 +297,9 @@ export default {
         margin-right:15px;
         color: #3e3e3e;
         display: none;
+    }
+
+    .active-song {
+        color: rgb(236, 65, 65);
     }
 </style>

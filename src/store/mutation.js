@@ -29,6 +29,9 @@ const mutations = {
     },
     clearMusicQueue(state){
         state.musicQueue = []
+    },
+    changeNowIndex(state,index){
+        state.nowIndex = index
     }
 }
 

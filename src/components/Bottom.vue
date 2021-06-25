@@ -10,11 +10,11 @@
         </div>
         <span class="music-name" v-show="!globalMusicInfo.songName" style="line-height:50px">还没有播放音乐哦</span>
       </div>
-      <AudioChen :musicUrl="globalMusicUrl" @timeupdate="updateTime" @play="playStatus" @pause="pauseStatus"></AudioChen>
+      <AudioChen :musicUrl="globalMusicUrl" @timeupdate="updateTime" @play="playStatus" @pause="pauseStatus" @next="next" @prev="prev" @end="next"></AudioChen>
       <!-- <audio :src="globalMusicUrl" autoplay controls ref="audio" @timeupdate="updateTime" @pause="pauseStatus" @play="playStatus"></audio> -->
       <div class="bofangliebiao" title="播放队列" @click="showQueue">
           <span class="iconfont icon-yinleliebiao"></span>
-          <span>13</span>
+          <span>{{musicQueue.length}}</span>
       </div>
   </div>
 </template>
@@ -44,6 +44,9 @@ export default {
         },
         globalMusicInfo(){
             return this.$store.state.globalMusicInfo
+        },
+        musicQueue(){
+            return this.$store.state.musicQueue
         }
     },
     methods:{
@@ -73,6 +76,27 @@ export default {
         },
         showQueue(){
             this.$parent.showQueue = !this.$parent.showQueue
+        },
+        next(){
+            let ids = []
+            for (const item of this.musicQueue) {
+                ids.push(item.id)
+            }
+            console.log(ids)
+            let nowIndex = ids.indexOf(this.globalMusicInfo.id)
+            console.log(nowIndex)
+            let nextIndex = (nowIndex + 1) % this.musicQueue.length
+            // let nextId = this.musicQueue[nextIndex].id
+            this.$store.commit('changeNowIndex',nextIndex)
+        },
+        prev(){
+            let ids = []
+            for (const item of this.musicQueue) {
+                ids.push(item.id)
+            }
+            let nowIndex = ids.indexOf(this.globalMusicInfo.id)
+            let prevIndex = (nowIndex - 1) % this.musicQueue.length < 0 ? ((nowIndex - 1) % this.musicQueue.length + this.musicQueue.length) : (nowIndex - 1) % this.musicQueue.length
+            this.$store.commit('changeNowIndex',prevIndex)
         }
     },
     watch:{
@@ -169,9 +193,5 @@ export default {
 
     .bofangliebiao span:nth-of-type(1){
         font-size: 22px;
-    }
-
-    .bofangliebiao span:nth-of-type(2) {
-
     }
 </style>

@@ -11,10 +11,10 @@
      您的浏览器不支持audio标签></audio>
     <div class="audio-left">
         <div class="audio-btns">
-        <span class="iconfont icon-shangyishou" title="上一首"></span>
+        <span class="iconfont icon-shangyishou" title="上一首" @click="prev"></span>
         <span class="iconfont icon-play" title="播放" v-if="!isPaused" @click="changeStatus('play')"></span>
         <span class="iconfont icon-pause" title="暂停" v-if="isPaused" @click="changeStatus('pause')"></span>        
-        <span class="iconfont icon-xiayishou" title="下一首"></span>
+        <span class="iconfont icon-xiayishou" title="下一首" @click="next"></span>
         </div>
 
         <div class="audio-progress">
@@ -79,6 +79,7 @@ export default {
             // 存在拖动进度条歌词不随着滚动的bug
             this.$refs.audio.currentTime = this.currentTime
             this.isDrag = false
+            // this.changeStatus(this.isPaused?'play':'pause')
         },
         updateTime(e){
             // console.log(e.target.currentTime)
@@ -90,8 +91,10 @@ export default {
         getDuration(e){
             // console.log(e.target.duration)
             this.duration = e.target.duration
-            this.isPaused = true
-            this.$emit('play')
+
+            // 下面两句会导致在暂停时滑动进度条使得按钮状态改变，图片旋转而不播放的bug
+            // this.isPaused = true
+            // this.$emit('play')
         },
         changeVolume(){
             this.$refs.audio.volume = this.voice
@@ -104,8 +107,15 @@ export default {
             return val*100+"%";
         },
         onEnded(){
-            this.isPaused = false
-            this.$emit('pause')
+            // this.isPaused = false
+            // this.$emit('pause')
+            this.$emit('end')
+        },
+        next(){
+            this.$emit('next')
+        },
+        prev(){
+            this.$emit('prev')
         }
 
     },
@@ -122,6 +132,9 @@ export default {
                 this.$refs.audio.muted = true
             }else
                 this.$refs.audio.muted = false
+        },
+        musicUrl(){
+            this.isPaused = true
         }
     }
 }

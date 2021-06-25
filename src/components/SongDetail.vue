@@ -119,19 +119,26 @@ export default {
         },
         isMusicPaused(){
             return this.$store.state.isMusicPaused
+        },
+        globalMusicUrl(){
+            return this.$store.state.globalMusicUrl
         }
     },
     watch:{
-        show(){
-            if(this.show == false)
-            {
-                let id = this.$store.state.globalMusicInfo.id
-                this.getLyric(id)
-            }
-        },
+        // show(){
+        //     if(this.show == false)
+        //     {
+        //         let id = this.$store.state.globalMusicInfo.id
+        //         this.getLyric(id)
+        //     }
+        // },
         globalCurrentTime(){
             if(this.hasLyric) //解决没有歌词仍会滚动的bug
                 this.lryicActive(this.globalCurrentTime)
+        },
+        globalMusicUrl(){
+            let id = this.$store.state.globalMusicInfo.id
+            this.getLyric(id)
         }
     }
 }
