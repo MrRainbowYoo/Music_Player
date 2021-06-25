@@ -26,7 +26,12 @@
 
                             <el-table-column prop="singer" label="歌手" width=""></el-table-column>
 
-                            <el-table-column prop="album" label="专辑" ></el-table-column>
+                            <el-table-column prop="album" label="专辑" >
+                                <template slot-scope="scope" style="">
+                                    <span>{{scope.row.album}}</span>
+                                    <span class="plus" title="添加至歌单" @click="addToQueue(scope.row)">+</span>
+                                </template>
+                            </el-table-column>
 
                             <el-table-column prop="duration" label="时长" width="100"></el-table-column>                            
                         </el-table>                        
@@ -109,6 +114,17 @@ export default {
         handleCurrentChange(page){
             this.page = page
             this.getTableData(this.type)
+        },
+        addToQueue(row){
+            console.log(row)
+            let obj = {
+                id:row.id,
+                imgUrl:row.imgUrl,
+                duration:row.duration,
+                singer:row.singer,
+                songName:row.songName
+            }
+            this.$store.commit('changeMusicQueue',obj)
         },
         handleClick(tab) {
             let label = tab.label
@@ -307,6 +323,23 @@ export default {
         display: flex;
         justify-content: center;
         margin-top: 20px;
+    }
+
+    .plus {
+        padding: 10px;
+        border-radius: 50%;
+        margin-left: 10px;
+        font-size: 25px;
+        position: absolute;
+        left: -80px;
+        top: 0;
+        font-weight: bold;
+        cursor: pointer;
+        display: none;
+    }
+
+    .songs-table .el-table__row:hover .plus{
+        display: block;
     }
 
     .el-pagination.is-background .el-pager li:not(.disabled).active {

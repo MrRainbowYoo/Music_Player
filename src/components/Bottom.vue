@@ -12,10 +12,14 @@
       </div>
       <AudioChen :musicUrl="globalMusicUrl" @timeupdate="updateTime" @play="playStatus" @pause="pauseStatus" @next="next" @prev="prev" @end="next"></AudioChen>
       <!-- <audio :src="globalMusicUrl" autoplay controls ref="audio" @timeupdate="updateTime" @pause="pauseStatus" @play="playStatus"></audio> -->
-      <div class="bofangliebiao" title="播放队列" @click="showQueue">
+
+    <el-tooltip content="播放队列" placement="top" effect="light">
+        <div class="bofangliebiao" @click="showQueue">
           <span class="iconfont icon-yinleliebiao"></span>
           <span>{{musicQueue.length}}</span>
       </div>
+    </el-tooltip>
+
   </div>
 </template>
 
@@ -78,25 +82,41 @@ export default {
             this.$parent.showQueue = !this.$parent.showQueue
         },
         next(){
-            let ids = []
-            for (const item of this.musicQueue) {
-                ids.push(item.id)
+            if(this.musicQueue.length == 0)
+                this.$message({
+                    type:'warning',
+                    message:'播放列表是空的~',
+                    showClose:true
+                })
+            else {
+                let ids = []
+                for (const item of this.musicQueue) {
+                    ids.push(item.id)
+                }
+                // console.log(ids)
+                let nowIndex = ids.indexOf(this.globalMusicInfo.id)
+                // console.log(nowIndex)
+                let nextIndex = (nowIndex + 1) % this.musicQueue.length
+                // let nextId = this.musicQueue[nextIndex].id
+                this.$store.commit('changeNowIndex',nextIndex)                           
             }
-            console.log(ids)
-            let nowIndex = ids.indexOf(this.globalMusicInfo.id)
-            console.log(nowIndex)
-            let nextIndex = (nowIndex + 1) % this.musicQueue.length
-            // let nextId = this.musicQueue[nextIndex].id
-            this.$store.commit('changeNowIndex',nextIndex)
         },
         prev(){
-            let ids = []
-            for (const item of this.musicQueue) {
-                ids.push(item.id)
+            if(this.musicQueue.length == 0)
+                this.$message({
+                    type:'warning',
+                    message:'播放列表是空的~',
+                    showClose:true
+                })
+            else {            
+                let ids = []
+                for (const item of this.musicQueue) {
+                    ids.push(item.id)
+                }
+                let nowIndex = ids.indexOf(this.globalMusicInfo.id)
+                let prevIndex = (nowIndex - 1) % this.musicQueue.length < 0 ? ((nowIndex - 1) % this.musicQueue.length + this.musicQueue.length) : (nowIndex - 1) % this.musicQueue.length
+                this.$store.commit('changeNowIndex',prevIndex)
             }
-            let nowIndex = ids.indexOf(this.globalMusicInfo.id)
-            let prevIndex = (nowIndex - 1) % this.musicQueue.length < 0 ? ((nowIndex - 1) % this.musicQueue.length + this.musicQueue.length) : (nowIndex - 1) % this.musicQueue.length
-            this.$store.commit('changeNowIndex',prevIndex)
         }
     },
     watch:{

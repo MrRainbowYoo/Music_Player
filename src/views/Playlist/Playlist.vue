@@ -5,7 +5,9 @@
                 <img :src="playlistInfo.coverImgUrl" alt="">
             </div>
             <div class="playlist-info">
-                <div class="playlist-name">{{playlistInfo.name}}</div>
+                <div class="playlist-name">
+                    <div class="tag1">歌单</div>{{playlistInfo.name}}
+                </div>
                 <div class="playlist-user-info">
                     <div class="playlist-user-avatar">
                         <img :src="playlistUserAvatar" alt="">
@@ -15,6 +17,7 @@
                         <span>{{playlistInfo.updateTime}}</span> 创建
                     </div>
                 </div>
+                <div class="playAllBtn iconfont icon-play" @click="playAll"> 播放全部</div>
                 <div class="playlist-tags">
                     <span>标签：</span>
                     <span v-for="(item,index) in playlistInfo.tags" :key="index" class="tags">{{item}}</span>
@@ -52,7 +55,12 @@
 
                             <el-table-column prop="ar[0].name" label="歌手" width=""></el-table-column>
 
-                            <el-table-column prop="al.name" label="专辑" ></el-table-column>
+                            <el-table-column prop="al.name" label="专辑" >
+                                <template slot-scope="scope" style="">
+                                    <span>{{scope.row.al.name}}</span>
+                                    <span class="plus" title="添加至歌单" @click="addToQueue(scope.row)" style="top:20px">+</span>
+                                </template>                                
+                            </el-table-column>
 
                             <el-table-column prop="dt" label="时长" width="100"></el-table-column>                            
                         </el-table>                        
@@ -160,7 +168,7 @@ export default {
                 id:playlistId
             }
         }).then(res=>{
-            // console.log(res)
+            console.log(res)
             this.playlistInfo = res.data.playlist
             this.playlistUserAvatar = res.data.playlist.creator.avatarUrl
             this.playlistUserNickname = res.data.playlist.creator.nickname
@@ -171,7 +179,7 @@ export default {
             for(let item of this.trackIds){
                 idsArray.push(item.id)
             }
-            idsArray = idsArray.slice(1,21)//歌单歌曲的数量
+            // idsArray = idsArray.slice(1,21)//歌单歌曲的数量
             let idsStr = idsArray.join(",")
 
             // // 加载歌曲列表
@@ -199,7 +207,18 @@ export default {
         handleCurrentChange(page){
             this.page = page
             this.getComments()
-        },        
+        },
+        addToQueue(row){
+            console.log(row)
+            let obj = {
+                id:row.id,
+                imgUrl:row.al.picUrl,
+                duration:row.dt,
+                singer:row.ar[0].name,
+                songName:row.name
+            }
+            this.$store.commit('changeMusicQueue',obj)
+        },                
         getTracks(trackId){
             axios({
                 url:this.URL+"/song/detail",
@@ -288,6 +307,22 @@ export default {
                 this.total = this.playlistInfo.commentCount - this.hotComments.length    
                 this.comments = res.data.comments
             })
+        },
+        playAll(){
+            let allSongs = this.tableData
+            this.$store.commit('clearMusicQueue')
+            for (const item of allSongs) {
+                let obj = {
+                    duration:item.dt,
+                    id:item.id,
+                    imgUrl:item.al.picUrl,
+                    singer:item.ar[0].name,
+                    songName:item.name
+                }
+                this.$store.commit('changeMusicQueue',obj)
+            }
+            // 若第一首歌无版权无法播放，会出现bug，自动播放也是
+            this.$store.commit('changeNowIndex',0)
         }
     }
 }
@@ -325,6 +360,24 @@ export default {
         flex: 1;
     }
 
+    .playlist-info .tag1 {
+        color: rgb(208, 53, 53);
+        border: 1px solid rgb(208, 53, 53);
+        display: inline-block;
+        font-size: 20px;
+        margin-right: 10px;
+        border-radius: 5px;
+        padding: 0px 7px;
+        cursor: default;
+    }
+
+    .playlist-name {
+        font-size: 25px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+    }
+
     .playlist-user-info {
         display: flex;
         align-items: center;
@@ -332,7 +385,7 @@ export default {
     }
 
     .playlist-user-info img {
-        margin: 20px 0;
+        margin: 10px 0;
     }
 
     .playlist-user-avatar img {
@@ -345,8 +398,18 @@ export default {
         margin: 0 10px;
     }
 
+    .playAllBtn {
+        display: inline-block;
+        margin-right: 10px;
+        border-radius: 20px;
+        background: #d03535;
+        padding: 5px 15px;
+        color: #fff;
+        cursor: pointer;
+    }
+
     .playlist-tags {
-        margin-bottom: 20px;
+        margin: 10px 0;
     }
 
     .playlist-desc {

@@ -301,5 +301,6 @@ export default {
 
     .active-song {
         color: rgb(236, 65, 65);
+        position: relative;
     }
 </style>

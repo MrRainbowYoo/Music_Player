@@ -4,7 +4,7 @@
     <Index></Index>
     <SongDetail :show="show"></SongDetail>
     <transition name="fade">
-      <Queue v-show="!showQueue"></Queue>
+      <Queue v-show="showQueue"></Queue>
     </transition>
     <Bottom></Bottom>
   </div>
