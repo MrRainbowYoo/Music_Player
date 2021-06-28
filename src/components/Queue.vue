@@ -149,8 +149,8 @@ export default {
         min-width: 300px;
         height: 700px;
         position: fixed;
-        right: 0;
-        bottom: 60px;
+        right: 10px;
+        bottom: 59px;
         border: 1px solid #7f8c8d;
         /* border-radius: 10px; */
         border-top-left-radius: 10px;
@@ -158,6 +158,7 @@ export default {
         background-color: #fff;
         box-sizing: border-box;
         font-size: 14px;
+        box-shadow: 0 0 5px rgba(0,0,0,.6);
     }
 
     .queue-tabs .el-tabs__item{

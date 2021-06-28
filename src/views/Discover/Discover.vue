@@ -173,21 +173,21 @@ export default {
         list-style: none;
     }
 
-  .el-carousel__item:nth-child(2n) {
+  .Carousel >>> .el-carousel__item:nth-child(2n) {
     background-color: #99a9bf;
   }
   
-  .el-carousel__item:nth-child(2n+1) {
+  .Carousel >>> .el-carousel__item:nth-child(2n+1) {
     background-color: #d3dce6;
   }
 
-  .el-carousel__button {
+  .Carousel >>> .el-carousel__button {
       width: 8px;
       height: 8px;
       border-radius: 50%;
   }
 
-  .el-carousel__indicator.is-active button {
+  .Carousel >>> .el-carousel__indicator.is-active button {
       background-color: rgb(236, 65, 65);
   }
 

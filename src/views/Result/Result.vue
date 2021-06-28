@@ -182,7 +182,8 @@ export default {
                 }
 
                 this.$store.commit("changeMusicUrl",this.songUrl)
-                this.$store.commit("changeMusicInfo",musicInfo)                      
+                this.$store.commit("changeMusicInfo",musicInfo)
+                this.$store.commit('changeMusicQueue',musicInfo)                      
 
                 }else{
                     this.$message({
