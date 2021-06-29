@@ -25,7 +25,7 @@
                 <ul>
                     <li class="iconfont icon-play" v-for="(item,index) in songLists" :key="index" @click="toPlaylistDetail(item.id)" >
                         <p class="first-p">播放量 : {{item.playCount}}</p>
-                        <img :src="item.coverImgUrl" alt="songLists">
+                        <img v-lazy="item.coverImgUrl" alt="songLists">
                         <p class="last-p">{{item.name}}</p>
                     </li>                                                                                                                    
                 </ul>

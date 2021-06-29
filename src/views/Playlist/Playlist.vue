@@ -15,6 +15,7 @@
                     <div class="playlist-user-name">{{playlistUserNickname}}</div>
                     <div class="playlist-create-time">
                         <span>{{playlistInfo.updateTime}}</span> 创建
+                        <span>共{{trackIds.length}}首</span>
                     </div>
                 </div>
                 <div class="playAllBtn iconfont icon-play" @click="playAll"> 播放全部</div>
@@ -36,15 +37,21 @@
                         <el-table
                             :data="tableData"
                             stripe
-                            style="width: 100%"
-                            @row-dblclick="play">
+                            style="width: 100%;"
+                            @row-dblclick="play"
+                            v-el-table-infinite-scroll="loadMore"
+                            infinite-scroll-delay=500
+                            infinite-scroll-disabled="noMore">
+                            <!-- v-infinite-scroll="loadMore"
+                            infinite-scroll-disabled="noMore"
+                            infinite-scroll-delay=1000> -->
 
                             <el-table-column type="index" width="50"></el-table-column>
 
                             <el-table-column width="100">
                                 <template slot-scope="scope">
                                 <div class="img-wrap">
-                                    <img :src="scope.row.al.picUrl" alt="">
+                                    <img v-lazy="scope.row.al.picUrl" alt="">
                                     <p class="iconfont icon-play"  @click="play(scope.row)"></p>                                
                                 </div>                                
                                 </template>
@@ -63,7 +70,7 @@
                             </el-table-column>
 
                             <el-table-column prop="dt" label="时长" width="100"></el-table-column>                            
-                        </el-table>                        
+                        </el-table>
                     </div>                    
                 </el-tab-pane>
                 <el-tab-pane :label="`评论(${playlistInfo.commentCount})`" name="second">
@@ -136,6 +143,7 @@
 <script>
 import axios from 'axios'
 import {formatDate,formatDateFully} from '../../utils/utils'
+import elTableInfiniteScroll from 'el-table-infinite-scroll'
 // import func from 'vue-editor-bridge'
 
 export default {
@@ -153,52 +161,29 @@ export default {
             pageSize:10,
             page:1,
             playlistId:"",
-            loading:true
+            loading:true,
+            loadBegin:0,
+            allData:[]
         }
+    },
+    directives:{
+        'el-table-infinite-scroll':elTableInfiniteScroll
     },
     created(){
         console.log(this.$route.query.id)
         let playlistId = this.$route.query.id
         this.playlistId = playlistId
 
-        axios({
-            url:this.URL+'/playlist/detail',
-            method:'get',
-            params:{
-                id:playlistId
-            }
-        }).then(res=>{
-            console.log(res)
-            this.playlistInfo = res.data.playlist
-            this.playlistUserAvatar = res.data.playlist.creator.avatarUrl
-            this.playlistUserNickname = res.data.playlist.creator.nickname
-            this.trackIds = res.data.playlist.trackIds
-            this.playlistInfo.updateTime = formatDate(new Date(this.playlistInfo.updateTime))
-
-            let idsArray = []
-            for(let item of this.trackIds){
-                idsArray.push(item.id)
-            }
-            // idsArray = idsArray.slice(1,21)//歌单歌曲的数量
-            let idsStr = idsArray.join(",")
-
-            // // 加载歌曲列表
-            // this.getTracks(idsStr)
-
-            // // true 代表第一次加载评论
-            // this.getComments(true)
-
-            // this.loading = false
-            
-            let that = this
-            Promise.all([this.getTracks(idsStr),this.getComments(true)]).then(()=>{
-                that.loading = false
-            })
-
-
-        })
-
-
+        this.getTableData()
+        
+        setTimeout(() => {
+            this.loadAll()
+        }, 1000);
+    },
+    computed:{
+        noMore(){
+            return this.tableData.length >= this.trackIds.length
+        }
     },
     methods:{
         handleClick(tab) {
@@ -208,8 +193,23 @@ export default {
             this.page = page
             this.getComments()
         },
+        loadMore(){
+            console.log('滚动加载')
+            this.loading = true
+            this.loadBegin += 20
+            this.getTableData()
+        },
+        loadAll(){
+            console.log('loadAll')
+            let ids = []
+            for(let item of this.trackIds){
+                ids.push(item.id)
+            }
+            let idsStr1 = ids.join(",")
+            this.getTracks(idsStr1,true)
+        },
         addToQueue(row){
-            console.log(row)
+            // console.log(row)
             let obj = {
                 id:row.id,
                 imgUrl:row.al.picUrl,
@@ -218,8 +218,43 @@ export default {
                 songName:row.name
             }
             this.$store.commit('changeMusicQueue',obj)
+        },
+        getTableData(){
+            axios({
+                url:this.URL+'/playlist/detail',
+                method:'get',
+                params:{
+                    id:this.playlistId
+                }
+            }).then(res=>{
+                // console.log(res)
+                this.playlistInfo = res.data.playlist
+                this.playlistUserAvatar = res.data.playlist.creator.avatarUrl
+                this.playlistUserNickname = res.data.playlist.creator.nickname
+                this.trackIds = res.data.playlist.trackIds
+                this.playlistInfo.updateTime = formatDate(new Date(this.playlistInfo.updateTime))
+
+                let idsArray = []
+                for(let item of this.trackIds){
+                    idsArray.push(item.id)
+                }
+                if(this.loadBegin+20 >= idsArray.length)
+                    idsArray = idsArray.slice(this.loadBegin)
+                else
+                    idsArray = idsArray.slice(this.loadBegin,this.loadBegin+20)//歌单歌曲的数量
+                let idsStr = idsArray.join(",")
+                
+                // 这一段bug
+                Promise.all([this.getTracks(idsStr,false),this.getComments(true)]).then(()=>{
+                    console.log('1111')
+                })
+
+                setTimeout(()=>{
+                    this.loading = false
+                },500)
+            })
         },                
-        getTracks(trackId){
+        getTracks(trackId,all=false){
             axios({
                 url:this.URL+"/song/detail",
                 method:'get',
@@ -227,56 +262,61 @@ export default {
                     ids:trackId
                 }
             }).then(res=>{
-                // console.log(res)
+                console.log(res)
+                let pushList = []
                 for(let item of res.data.songs){
                     let duration = item.dt
                     let min = parseInt(duration / 60000).toString().padStart(2,'0')
                     let second = parseInt((duration-min*60000)/1000).toString().padStart(2,'0')
                     item.dt = `${min}:${second}`
+
+                    pushList.push(item)
                 }
-                this.tableData = res.data.songs
+                // console.log(pushList)
+
+
+                if(all){
+                    this.allData = this.allData.concat(pushList)
+                    console.log('loading all.......')
+                }else{
+                    this.tableData = this.tableData.concat(pushList)
+                    console.log('loading a little')
+                }
+
             })
         },
         play(row){
-        console.log(row)
-        let id = row.id
-        axios({
-            url:this.URL+"/song/url",
-            method: "get",
-            params:{
-            id
-            }
-        }).then(res=>{
-            if(res.data.data[0].url){
-            // console.log(res)
-            this.songUrl = res.data.data[0].url
-            // this.$parent.$parent.musicUrl = this.songUrl
-            // // 传入歌曲信息
-            // this.$parent.$parent.musicInfo = {
-            //     imgUrl:row.al.picUrl,
-            //     singer:row.ar[0].name,
-            //     songName:row.name
-            // }
-            
-            let musicInfo = {
-                imgUrl:row.al.picUrl,
-                singer:row.ar[0].name,
-                songName:row.name,
-                id:row.id,
-                duration:row.dt              
-            }
+            console.log(row)
+            let id = row.id
+            axios({
+                url:this.URL+"/song/url",
+                method: "get",
+                params:{
+                id
+                }
+            }).then(res=>{
+                if(res.data.data[0].url){
+                this.songUrl = res.data.data[0].url
+                
+                let musicInfo = {
+                    imgUrl:row.al.picUrl,
+                    singer:row.ar[0].name,
+                    songName:row.name,
+                    id:row.id,
+                    duration:row.dt              
+                }
 
-            this.$store.commit("changeMusicUrl",this.songUrl)
-            this.$store.commit("changeMusicInfo",musicInfo)      
+                this.$store.commit("changeMusicUrl",this.songUrl)
+                this.$store.commit("changeMusicInfo",musicInfo)      
 
-            }else{
-                this.$message({
-                showClose: true,
-                message: '对不起，歌曲暂时无法播放。',
-                type: 'error'
-                });
-            }
-        })
+                }else{
+                    this.$message({
+                    showClose: true,
+                    message: '对不起，歌曲暂时无法播放。',
+                    type: 'error'
+                    });
+                }
+            })
         },        
         getComments(isFirst=false){
             axios({
@@ -309,7 +349,7 @@ export default {
             })
         },
         playAll(){
-            let allSongs = this.tableData
+            let allSongs = this.allData
             this.$store.commit('clearMusicQueue')
             for (const item of allSongs) {
                 let obj = {

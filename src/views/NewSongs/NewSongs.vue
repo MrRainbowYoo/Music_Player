@@ -12,7 +12,7 @@
           <el-table-column width="100">
             <template slot-scope="scope">
               <div class="img-wrap">
-                <img :src="scope.row.imgUrl" alt="">
+                <img v-lazy="scope.row.imgUrl" alt="">
                 <p class="iconfont icon-play"  @click="play(scope.row)"></p>                                
               </div>                                
             </template>

@@ -98,7 +98,8 @@ export default {
                 // console.log(nowIndex)
                 let nextIndex = (nowIndex + 1) % this.musicQueue.length
                 // let nextId = this.musicQueue[nextIndex].id
-                this.$store.commit('changeNowIndex',nextIndex)                           
+                this.$store.commit('changeNowIndex',nextIndex)
+                this.$store.commit('changeMusicStatus',false)                           
             }
         },
         prev(){
@@ -116,6 +117,7 @@ export default {
                 let nowIndex = ids.indexOf(this.globalMusicInfo.id)
                 let prevIndex = (nowIndex - 1) % this.musicQueue.length < 0 ? ((nowIndex - 1) % this.musicQueue.length + this.musicQueue.length) : (nowIndex - 1) % this.musicQueue.length
                 this.$store.commit('changeNowIndex',prevIndex)
+                this.$store.commit('changeMusicStatus',false)  
             }
         }
     },

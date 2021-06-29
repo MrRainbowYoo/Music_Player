@@ -41,6 +41,7 @@ export default {
 
     .index-left {
         width: 200px;
+        min-width: 200px;
         background-color: #ededed;
         text-align: center;
     }
@@ -82,6 +83,7 @@ export default {
 
     main {
         flex: 1;
+        min-width: 750px;
         /* height: 800px; */
         /* overflow-y: scroll; */
         /* background-color: skyblue; */

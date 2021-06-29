@@ -13,7 +13,7 @@
                 <ul>
                     <li class="iconfont icon-play" v-for="(item,index) in recommendList" :key="index" @click="toPlaylistDetail(item.id)">
                         <p class="first-p">{{item.copywriter}}</p>
-                        <img :src="item.picUrl" alt="recommend">
+                        <img v-lazy="item.picUrl" alt="recommend">
                         <p class="last-p" :title="item.name">{{item.name}}</p>
                     </li>                                                                                                                    
                 </ul>
@@ -24,7 +24,7 @@
             <ul class="new-songs">
                 <li v-for="(item,index) in newSongs" :key="index">
                     <div class="music-img-wrap">
-                        <img :src="item.picUrl" alt="newSongs">
+                        <img v-lazy="item.picUrl" alt="newSongs">
                         <p class="iconfont icon-play" @click="playMusic(item)"></p>
                     </div>
 
@@ -40,7 +40,7 @@
             <ul class="mv-list">
                 <li v-for="(item,index) in newMvs" :key="index" @click="toMvDetail(item.id)">
                     <div class="mv-img-wrap">
-                        <img :src="item.picUrl" alt="newMvs">
+                        <img v-lazy="item.picUrl" alt="newMvs">
                         <p class="iconfont icon-play play"></p>
                         <p class="play-count iconfont icon-play">{{item.playCount}}</p>
                     </div>
@@ -192,7 +192,7 @@ export default {
   }
 
   .discover {
-      max-width: 1300px;
+      max-width: 1300px;    
       margin: 0 auto;
       padding: 20px;
   }

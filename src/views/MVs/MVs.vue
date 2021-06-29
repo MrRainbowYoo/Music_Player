@@ -40,7 +40,7 @@
       <ul class="mv-list">
           <li v-for="(item,index) in mvList" :key="index" @click="toMvDetail(item.id)">
               <div class="mv-img-wrap">
-                  <img :src="item.cover" alt="newMvs">
+                  <img v-lazy="item.cover" alt="newMvs">
                   <p class="iconfont icon-play play"></p>
                   <p class="play-count iconfont icon-play">{{item.playCount}}</p>
               </div>
