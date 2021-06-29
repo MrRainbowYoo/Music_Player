@@ -1,5 +1,5 @@
 <template>
-  <div class="mv-detail">
+  <div class="mv-detail" v-loading="loading">
       <div class="mv-wrap">
           <h4 class="head">MV详情</h4>
           <div class="video-wrap">
@@ -42,7 +42,7 @@
                         </ul>
         </div>
 
-                <div class="mv-content-wrap">
+                <div class="mv-content-wrap" v-loading="loadingComments">
             <h4 class="head">最新评论({{this.total}})</h4>
                         <ul>
                             <li v-for="(item,index) in comments" :key="index">
@@ -112,7 +112,9 @@ export default {
             comments:[],
             total:0,
             pageSize:10,
-            page:1,            
+            page:1,
+            loading:true,
+            loadingComments:false            
         }
     },
     watch:{
@@ -130,6 +132,7 @@ export default {
             this.getComments()
         },
         getComments(){
+            this.loadingComments = true
             axios({
                 url:this.URL+"/comment/mv",
                 method:'get',
@@ -153,10 +156,13 @@ export default {
                 }               
 
                 this.total = this.mvInfo.commentCount - this.hotComments.length
-            })  
+            })
+            setTimeout(() => {
+                this.loadingComments = false
+            }, 500);  
         },
         searchMV(id){
-
+            this.loading = true
             // 获取mv播放url
             axios({
                 url:this.URL+"/mv/url",
@@ -216,13 +222,17 @@ export default {
                 // 获取评论信息
                 this.getComments()      
             })
+
+            setTimeout(() => {
+                this.loading = false
+            }, 500);
         }           
     },
     created(){
         console.log(this.$route.query.id)
         let mvId = this.$route.query.id
         this.mvId = mvId
-
+    
         this.searchMV(mvId)
 
     }
@@ -240,6 +250,14 @@ ul {
     margin: 0 auto;
     padding: 20px;
     display: flex;
+}
+
+.mv-detail >>> .el-loading-spinner {
+      top: 20%;
+  }
+
+.mv-content-wrap >>> .el-loading-spinner {
+    top: 50%;
 }
 
 .head {

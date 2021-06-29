@@ -1,5 +1,5 @@
 <template>
-    <div class="discover">  
+    <div class="discover" v-loading="loading">  
         <div class="Carousel">
             <el-carousel :interval="3000" type="card" height="250px">
                 <el-carousel-item v-for="(item,index) in banners" :key="index">
@@ -64,7 +64,8 @@ export default {
             banners:[],
             recommendList:[],
             newSongs:[],
-            newMvs:[]
+            newMvs:[],
+            loading:true
         }
     },
     created(){
@@ -110,6 +111,10 @@ export default {
                     this.newMvs[i].playCount = parseInt(this.newMvs[i].playCount/10000)+'万'
             }             
         })
+
+        setTimeout(() => {
+            this.loading = false
+        }, 500);
     },
     methods:{
         timeFormat(time){
@@ -195,6 +200,10 @@ export default {
       max-width: 1300px;    
       margin: 0 auto;
       padding: 20px;
+  }
+
+  .discover >>> .el-loading-spinner {
+      top: 20%;
   }
   
   .el-carousel__item--card{

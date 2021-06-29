@@ -37,7 +37,6 @@
                         <el-table
                             :data="tableData"
                             stripe
-                            style="width: 100%;"
                             @row-dblclick="play"
                             v-el-table-infinite-scroll="loadMore"
                             infinite-scroll-delay=500
@@ -63,7 +62,7 @@
                             <el-table-column prop="ar[0].name" label="歌手" width=""></el-table-column>
 
                             <el-table-column prop="al.name" label="专辑" >
-                                <template slot-scope="scope" style="">
+                                <template slot-scope="scope">
                                     <span>{{scope.row.al.name}}</span>
                                     <span class="plus" title="添加至歌单" @click="addToQueue(scope.row)" style="top:20px">+</span>
                                 </template>                                
@@ -319,6 +318,7 @@ export default {
             })
         },        
         getComments(isFirst=false){
+            this.loading = true
             axios({
                 url:this.URL+'/comment/playlist',
                 method:'get',
@@ -347,6 +347,10 @@ export default {
                 this.total = this.playlistInfo.commentCount - this.hotComments.length    
                 this.comments = res.data.comments
             })
+
+            setTimeout(() => {
+                this.loading = false
+            }, 500);
         },
         playAll(){
             let allSongs = this.allData

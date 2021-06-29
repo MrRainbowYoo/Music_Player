@@ -70,9 +70,11 @@ export default {
           }
           songsList.push(song)
       }
-      this.tableData = songsList
-      this.loading = false      
+      this.tableData = songsList    
     })
+    setTimeout(() => {
+      this.loading = false
+    }, 500);
   },
   methods: {
     play(row){
@@ -132,6 +134,10 @@ export default {
       max-width: 1300px;
       margin: 0 auto;
       padding: 20px;
+  }
+
+  .new-songs >>> .el-loading-spinner {
+      top: 10%;
   }
 
   .el-table td, .el-table th.is-leaf {

@@ -1,5 +1,5 @@
 <template>
-    <div class="result">
+    <div class="result" v-loading="loading">
         <div class="result-top-info">
             <h2>{{keywords}}</h2>
             <span>共找到{{total}}个结果</span>
@@ -45,7 +45,7 @@
                             <ul>
                                 <li class="iconfont icon-play" v-for="(item,index) in playList" :key="index" @click="toPlaylistDetail(item.id)">
                                     <p class="first-p">播放量：{{item.playCount}}</p>
-                                    <img :src="item.coverImgUrl" alt="recommend">
+                                    <img v-lazy="item.coverImgUrl" alt="recommend">
                                     <p class="last-p" :title="item.name">{{item.name}}</p>
                                 </li>                                                                                                                    
                             </ul>
@@ -59,7 +59,7 @@
                     <ul class="mv-list1">
                         <li v-for="(item,index) in mvList" :key="index" @click="toMvDetail(item.id)">
                             <div class="mv-img-wrap">
-                                <img :src="item.cover" alt="newMvs">
+                                <img v-lazy="item.cover" alt="newMvs">
                                 <p class="iconfont icon-play play"></p>
                                 <p class="play-count iconfont icon-play">{{item.playCount}}</p>
                                 <p class="mv-duration">{{item.duration}}</p>                                
@@ -101,7 +101,8 @@ export default {
             page:1,
             total:0,
             pageSize:10,
-            type:1         
+            type:1,
+            loading:true        
         }
     },
     methods:{
@@ -195,7 +196,7 @@ export default {
             })
         },
         getTableData(type=1){
-
+            this.loading = true
             axios({
                 url:this.URL+"/cloudsearch",
                 method:"get",
@@ -259,10 +260,14 @@ export default {
                                 this.mvList[i].duration = `${min}:${second}`  
                             }
                      
-                        break                                
+                        break         
                 }
 
-            })            
+            })  
+            
+            setTimeout(() => {
+                this.loading = false        
+            }, 500);
         }        
     },
     created(){

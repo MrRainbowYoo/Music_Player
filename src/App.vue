@@ -83,4 +83,7 @@ export default {
     transform: translate3d(0,100%,0);
   }
 
+  .el-loading-spinner .path {
+    stroke: rgb(236, 65, 65) !important;
+  }
 </style>

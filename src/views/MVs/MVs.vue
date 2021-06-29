@@ -1,5 +1,5 @@
 <template>
-  <div class="mv">
+  <div class="mv" v-loading="loading">
     <div class="filter-wrap">
 
       <div class="section-wrap">
@@ -80,7 +80,8 @@ export default {
       total:0,
       page:1,
       pageSize:12,
-      mvList:[]
+      mvList:[],
+      loading:true
     }
   },
   watch:{
@@ -109,6 +110,7 @@ export default {
       this.getMvList(true)
     },
     getMvList(changeTotal=false){
+      this.loading = true
       axios({
         url:this.URL+"/mv/all",
         method:'get',
@@ -130,6 +132,9 @@ export default {
         }
 
       })
+      setTimeout(() => {
+        this.loading = false
+      }, 500);
     }
   },
   created(){

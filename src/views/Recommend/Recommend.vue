@@ -1,5 +1,5 @@
 <template>
-  <div class="recommend">
+  <div class="recommend" v-loading="loading">
     <div class="top-card-wrap">
       <img :src="highQuality.coverImgUrl" class="bg-blur" alt="bg-blur">
       <div class="top-card">
@@ -58,7 +58,8 @@ export default {
       tabActive:'全部',
       tabItems:['全部','欧美','华语','流行','说唱','摇滚','民谣','电子','轻音乐','影视原声','ACG','怀旧'],
       total:0,
-      page:1
+      page:1,
+      loading:true
     }
   },
   methods:{
@@ -70,7 +71,6 @@ export default {
       this.page = 1
       this.getHighQuality(item)
       this.getSongLists(item) /* 不调用函数 也可以使用watch监听实现 */
-
     },
     getHighQuality(cat='全部'){
         // 精品歌单
@@ -87,6 +87,7 @@ export default {
         })
     },
     getSongLists(cat="全部"){
+      this.loading = true
       // 歌单列表
       axios({
         url:this.URL+'/top/playlist',
@@ -103,8 +104,12 @@ export default {
         for(let i=0;i<this.songLists.length;i++){
           if(this.songLists[i].playCount >= 100000)
             this.songLists[i].playCount = parseInt(this.songLists[i].playCount/10000)+'万'
-        }        
+        }     
       })
+
+      setTimeout(() => {
+        this.loading = false
+      }, 500);
     },
     handleCurrentChange(page){
       // console.log(page)
