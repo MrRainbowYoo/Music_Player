@@ -35,7 +35,13 @@ const mutations = {
     },
     deleteToNext(state){
         state.deleteToNext = !state.deleteToNext
-    }
+    },
+    changeQueuePos(state,pos){
+        state.queuePos = pos
+    },
+    changeQueueStyle(state,status){
+        state.queueStyle = status
+    },
 }
 
 export default mutations

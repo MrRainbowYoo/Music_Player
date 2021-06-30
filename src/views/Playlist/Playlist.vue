@@ -64,7 +64,7 @@
                             <el-table-column prop="al.name" label="专辑" >
                                 <template slot-scope="scope">
                                     <span>{{scope.row.al.name}}</span>
-                                    <span class="plus" title="添加至歌单" @click="addToQueue(scope.row)" style="top:20px">+</span>
+                                    <span class="plus" title="添加至歌单" @click="addToQueue(scope.row,$event)" style="top:20px">+</span>
                                 </template>                                
                             </el-table-column>
 
@@ -135,7 +135,7 @@
                 </el-tab-pane>
             </el-tabs>     
         </div>
-   
+        <div class="add-ball iconfont icon-yinfu" v-show="showAddBall" ref="addBall"></div>     
     </div>
 </template>
 
@@ -162,7 +162,8 @@ export default {
             playlistId:"",
             loading:true,
             loadBegin:0,
-            allData:[]
+            allData:[],
+            showAddBall:false            
         }
     },
     directives:{
@@ -188,7 +189,10 @@ export default {
         },
         musicQueue(){
             return this.$store.state.musicQueue
-        }
+        },
+        queuePos(){
+            return this.$store.state.queuePos
+        }        
     },
     methods:{
         handleClick(tab) {
@@ -213,7 +217,7 @@ export default {
             let idsStr1 = ids.join(",")
             this.getTracks(idsStr1,true)
         },
-        addToQueue(row){
+        addToQueue(row,e){
             // console.log(row)
             let obj = {
                 id:row.id,
@@ -222,8 +226,51 @@ export default {
                 singer:row.ar[0].name,
                 songName:row.name
             }
-            this.$store.commit('changeMusicQueue',obj)
+
+            let ids = []
+            for (const item of this.musicQueue) {
+                ids.push(item.id)
+            }
+            if(ids.indexOf(obj.id) == -1){
+                this.beginAnimation(e.x,e.y)
+
+                setTimeout(() => {
+                    this.$store.commit('changeQueueStyle','add')      
+                    this.$store.commit('changeMusicQueue',obj)  
+                }, 500);
+         
+
+                setTimeout(() => {
+                    this.$store.commit('changeQueueStyle','normal')                   
+                }, 1000);
+            }else{
+                this.$message({
+                    type:'warning',
+                    message:"已存在播放列表哦",
+                    showClose:true
+                })
+            }            
         },
+        beginAnimation(x,y){
+            this.showAddBall = true
+            let endX = this.queuePos.left
+            let endY = this.queuePos.top
+            console.log('起始位置 x:'+x+' y:'+y)
+            console.log('终点位置 x:'+endX+' y:'+endY)
+
+            let el = document.querySelector(".add-ball")
+            el.style.left = x+'px'
+            el.style.top = y+'px'
+            
+            setTimeout(() => {
+                el.style.left = endX+'px'
+                el.style.top = endY+'px'
+            }, 0);
+
+            setTimeout(() => {
+                this.showAddBall = false
+            }, 500);
+        },                
         getTableData(){
             axios({
                 url:this.URL+'/playlist/detail',
@@ -388,6 +435,12 @@ export default {
 </script>
 
 <style scoped>
+    .add-ball {
+        position: fixed;
+        color: rgb(236, 65, 65);
+        transition: top .5s ease-in,left .5s linear;
+    }
+
     ul {
         list-style: none;
     }

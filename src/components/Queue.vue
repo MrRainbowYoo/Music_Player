@@ -41,7 +41,7 @@ export default {
         }
     },
     methods:{
-        handleClick(tab, event) {
+      handleClick(tab, event) {
             console.log(tab, event);
       },
       deleteQueue(id){
@@ -58,17 +58,27 @@ export default {
                 ids.push(item.id)
             }
             let ii = ids.indexOf(id)
-            this.$store.commit('deleteMusic',id)
-            if(ii < this.nowIndex){
-                this.$store.commit('changeNowIndex',this.nowIndex-1)          
-            }else if(ii== this.nowIndex){
-                this.$store.commit('deleteToNext')
-            }
 
-            this.$message({
-                type: 'success',
-                message: '删除成功!'
-            });
+
+            setTimeout(() => {
+                this.$store.commit('changeQueueStyle','delete') 
+                this.$store.commit('deleteMusic',id)
+                if(ii < this.nowIndex){
+                    this.$store.commit('changeNowIndex',this.nowIndex-1)          
+                }else if(ii== this.nowIndex){
+                    this.$store.commit('deleteToNext')
+                }     
+            }, 300);
+
+
+            setTimeout(() => {
+                this.$store.commit('changeQueueStyle','normal')                   
+            }, 1000);
+
+            // this.$message({
+            //     type: 'success',
+            //     message: '删除成功!'
+            // });
         }).catch(() => {
           this.$message({
             type: 'info',

@@ -14,7 +14,7 @@
       <!-- <audio :src="globalMusicUrl" autoplay controls ref="audio" @timeupdate="updateTime" @pause="pauseStatus" @play="playStatus"></audio> -->
 
     <el-tooltip content="播放队列" placement="top" effect="light">
-        <div class="bofangliebiao" @click="showQueue">
+        <div @click="showQueue($event)" ref="queue" :class="{'delete-queue-style bofangliebiao':this.queueStyle=='delete','add-queue-style bofangliebiao':this.queueStyle=='add','bofangliebiao':this.queueStyle=='normal'}">
           <span class="iconfont icon-yinleliebiao"></span>
           <span>{{musicQueue.length}}</span>
       </div>
@@ -54,7 +54,34 @@ export default {
         },
         nowIndex(){
             return this.$store.state.nowIndex
+        },
+        queueStyle(){
+            return this.$store.state.queueStyle
         }
+    },
+    mounted(){
+        const that = this
+                if(that.$refs.queue.getBoundingClientRect){
+                    // console.log(that.$refs.queue.getBoundingClientRect())
+                    let pos = {
+                        top:Math.floor(that.$refs.queue.getBoundingClientRect().top),
+                        left:Math.floor(that.$refs.queue.getBoundingClientRect().left)
+                    }
+                    that.$store.commit("changeQueuePos",pos)
+                }        
+        window.onresize = () => {
+            return (() => {
+                if(that.$refs.queue.getBoundingClientRect){
+                    // console.log(that.$refs.queue.getBoundingClientRect())
+                    let pos = {
+                        top:Math.floor(that.$refs.queue.getBoundingClientRect().top),
+                        left:Math.floor(that.$refs.queue.getBoundingClientRect().left)
+                    }
+                    that.$store.commit("changeQueuePos",pos)
+                }
+            })()
+        }        
+
     },
     methods:{
         toSongDetail(){
@@ -78,8 +105,9 @@ export default {
         playStatus(){
             this.$store.commit('changeMusicStatus',false)
         },
-        showQueue(){
+        showQueue(e){
             this.$parent.showQueue = !this.$parent.showQueue
+            console.log(`logo x:${e.x}, y:${e.y}`)
         },
         next(){
             if(this.musicQueue.length == 0)
@@ -137,6 +165,53 @@ export default {
 </script>
 
 <style>
+
+    .add-queue-style{
+        animation-name: addAni;
+        animation-duration: .3s;
+        animation-direction: alternate-reverse;
+        transform: scale(1);
+    }
+
+    @keyframes addAni {
+        to{
+            color: rgb(236, 65, 65);
+            transform: scale(1.5);
+        }
+    }
+
+    .add-queue-style::before{
+        content: "+1";
+        position: absolute;
+        top: -8px;
+        left: -20px;
+        transform: scale(0.8);
+        font-weight: bold;
+    }
+
+    .delete-queue-style{
+        animation-name: deleteAni;
+        animation-duration: .3s;
+        animation-direction: alternate-reverse;
+        transform: scale(1);
+    }
+
+    @keyframes deleteAni {
+        to{
+            color: green;
+            transform: scale(1.5);
+        }
+    }
+
+    .delete-queue-style::before{
+        content: "-1";
+        position: absolute;
+        top: -8px;
+        left: -20px;
+        transform: scale(0.8);
+        font-weight: bold;
+    }    
+
     .bottom {
         display: flex;
         align-items: center;

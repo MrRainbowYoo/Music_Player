@@ -1,6 +1,6 @@
 @font-face {
   font-family: "iconfont"; /* Project id  */
-  src: url('iconfont.ttf?t=1624536019505') format('truetype');
+  src: url('iconfont.ttf?t=1625060289840') format('truetype');
 }
 
 .iconfont {
@@ -41,6 +41,10 @@
 
 .icon-yinleliebiao-:before {
   content: "\e60f";
+}
+
+.icon-yinfu:before {
+  content: "\e604";
 }
 
 .icon-zanting:before {

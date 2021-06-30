@@ -62,6 +62,13 @@
       "unicode_decimal": 58895
     },
     {
+      "icon_id": "15056495",
+      "name": "音符",
+      "font_class": "yinfu",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
       "icon_id": "17782644",
       "name": "暂停",
       "font_class": "zanting",

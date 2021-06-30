@@ -12,7 +12,9 @@ const store = new Vuex.Store({
         isMusicPaused:true,
         musicQueue:[],
         nowIndex:0,
-        deleteToNext:false
+        deleteToNext:false,
+        queuePos:{},
+        queueStyle:'normal',
     },
     mutations
 })
