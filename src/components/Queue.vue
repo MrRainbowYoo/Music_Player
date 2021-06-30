@@ -24,7 +24,7 @@
                     </el-scrollbar>
                 </ul>
             </el-tab-pane>
-            <el-tab-pane label="播放历史" name="history">播放历史</el-tab-pane>
+            <!-- <el-tab-pane label="播放历史" name="history">播放历史</el-tab-pane> -->
         </el-tabs>
         <span v-if="!musicQueue.length" class="queue-tip">什么都没有~快去听歌吧</span>
       </div>
@@ -51,11 +51,24 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+
+            
+            let ids = []
+            for (const item of this.musicQueue) {
+                ids.push(item.id)
+            }
+            let ii = ids.indexOf(id)
             this.$store.commit('deleteMusic',id)
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+            if(ii < this.nowIndex){
+                this.$store.commit('changeNowIndex',this.nowIndex-1)          
+            }else if(ii== this.nowIndex){
+                this.$store.commit('deleteToNext')
+            }
+
+            this.$message({
+                type: 'success',
+                message: '删除成功!'
+            });
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -71,22 +84,33 @@ export default {
                 showClose:true
             })
         else{
-        this.$confirm('确定清空列表吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$store.commit('clearMusicQueue')
-          this.$message({
-            type: 'success',
-            message: '已清空!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消清空'
-          });          
-        });            
+            this.$confirm('确定清空列表吗?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+            }).then(() => {
+
+            this.$store.commit("changeMusicUrl","")
+            this.$store.commit("changeMusicInfo",{})
+            this.$store.commit("changeMusicStatus",true)
+            this.$store.commit("changeCurrentTime",0)
+            setTimeout(() => {
+             this.$store.commit('clearMusicQueue')               
+            }, 100);
+
+            // 强制刷新当前页面，初始化state
+            // this.$router.go(0)
+
+            this.$message({
+                type: 'success',
+                message: '已清空!'
+            });
+            }).catch(() => {
+            this.$message({
+                type: 'info',
+                message: '已取消清空'
+            });          
+            });            
         }
       },
       play(item){
@@ -108,7 +132,14 @@ export default {
                     duration:item.duration
                 }
                 this.$store.commit("changeMusicUrl",songUrl)
-                this.$store.commit("changeMusicInfo",musicInfo)          
+                this.$store.commit("changeMusicInfo",musicInfo)
+                this.$store.commit("changeMusicStatus",false)  
+
+                let ids = []
+                for (const item of this.musicQueue) {
+                    ids.push(item.id)
+                }
+                this.$store.commit("changeNowIndex",ids.indexOf(musicInfo.id))                
 
                 }else{
                     this.$message({
@@ -133,11 +164,30 @@ export default {
         },
         nowIndex(){
             return this.$store.state.nowIndex
+        },
+        deleteToNext(){
+            return this.$store.state.deleteToNext
         }
     },
     watch:{
         nowIndex(){
             this.play(this.musicQueue[this.nowIndex])
+        },
+        deleteToNext(){
+            if(this.nowIndex < this.musicQueue.length)
+                this.play(this.musicQueue[this.nowIndex])
+            if(this.musicQueue.length == 0){
+                this.$store.commit("changeNowIndex",0)
+                this.$store.commit("changeMusicUrl","")
+                this.$store.commit("changeMusicInfo",{})
+                this.$store.commit("changeMusicStatus",true)
+                this.$store.commit("changeCurrentTime",0)
+                setTimeout(() => {
+                this.$store.commit('clearMusicQueue')               
+                }, 100);           
+            }
+            if(this.nowIndex == this.musicQueue.length)
+                this.$store.commit("changeNowIndex",0)
         }
     }
 }

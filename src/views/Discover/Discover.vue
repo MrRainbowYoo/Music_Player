@@ -68,6 +68,11 @@ export default {
             loading:true
         }
     },
+    computed:{
+        musicQueue(){
+            return this.$store.state.musicQueue
+        }
+    },
     created(){
         // 获取轮播图
         axios({
@@ -144,6 +149,13 @@ export default {
                 }
                 this.$store.commit("changeMusicUrl",this.songUrl)
                 this.$store.commit("changeMusicInfo",musicInfo)
+                this.$store.commit("changeMusicStatus",false)                
+                this.$store.commit("changeMusicQueue",musicInfo)
+                let ids = []
+                for (const item of this.musicQueue) {
+                    ids.push(item.id)
+                }
+                this.$store.commit("changeNowIndex",ids.indexOf(musicInfo.id))                 
 
                 // this.$parent.$parent.musicUrl = this.songUrl
                 // // 传入歌曲信息

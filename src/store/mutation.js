@@ -32,6 +32,9 @@ const mutations = {
     },
     changeNowIndex(state,index){
         state.nowIndex = index
+    },
+    deleteToNext(state){
+        state.deleteToNext = !state.deleteToNext
     }
 }
 

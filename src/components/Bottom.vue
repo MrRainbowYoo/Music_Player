@@ -51,6 +51,9 @@ export default {
         },
         musicQueue(){
             return this.$store.state.musicQueue
+        },
+        nowIndex(){
+            return this.$store.state.nowIndex
         }
     },
     methods:{
@@ -67,16 +70,13 @@ export default {
         updateTime(e){
             // console.log(e.target.currentTime)
             this.currentTime = e.target.currentTime
+            console.log("目前歌单index为："+this.nowIndex)
         },
         pauseStatus(){
             this.$store.commit('changeMusicStatus',true)
-            // console.log('pause~~~~~~~~~~~')
-            // this.$store.state.isMusicPaused = true
         },
         playStatus(){
             this.$store.commit('changeMusicStatus',false)
-            // console.log('play~~~~~~~~~~~')
-            // this.$store.state.isMusicPaused = false
         },
         showQueue(){
             this.$parent.showQueue = !this.$parent.showQueue

@@ -125,20 +125,15 @@ export default {
         }
     },
     watch:{
-        // show(){
-        //     if(this.show == false)
-        //     {
-        //         let id = this.$store.state.globalMusicInfo.id
-        //         this.getLyric(id)
-        //     }
-        // },
         globalCurrentTime(){
             if(this.hasLyric) //解决没有歌词仍会滚动的bug
                 this.lryicActive(this.globalCurrentTime)
         },
         globalMusicUrl(){
-            let id = this.$store.state.globalMusicInfo.id
-            this.getLyric(id)
+            if(this.globalMusicUrl != ""){
+                let id = this.$store.state.globalMusicInfo.id
+                this.getLyric(id)
+            }
         }
     }
 }

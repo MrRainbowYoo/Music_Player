@@ -182,6 +182,12 @@ export default {
     computed:{
         noMore(){
             return this.tableData.length >= this.trackIds.length
+        },
+        nowIndex(){
+            return this.$store.state.nowIndex
+        },
+        musicQueue(){
+            return this.$store.state.musicQueue
         }
     },
     methods:{
@@ -306,7 +312,15 @@ export default {
                 }
 
                 this.$store.commit("changeMusicUrl",this.songUrl)
-                this.$store.commit("changeMusicInfo",musicInfo)      
+                this.$store.commit("changeMusicInfo",musicInfo)
+                this.$store.commit("changeMusicStatus",false)
+                this.$store.commit("changeMusicQueue",musicInfo)
+
+                let ids = []
+                for (const item of this.musicQueue) {
+                    ids.push(item.id)
+                }
+                this.$store.commit("changeNowIndex",ids.indexOf(musicInfo.id))
 
                 }else{
                     this.$message({
@@ -367,6 +381,7 @@ export default {
             }
             // 若第一首歌无版权无法播放，会出现bug，自动播放也是
             this.$store.commit('changeNowIndex',0)
+            this.play(allSongs[0])
         }
     }
 }

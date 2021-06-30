@@ -43,7 +43,6 @@
 export default {
     data(){
         return {
-            testUrl:'http://m7.music.126.net/20210622181529/e65e5cb804152f23c9e3bd59bdccf90b/ymusic/a530/f2cc/c82e/b8b5b240d9fce9ac549b3649464926a9.mp3',
             currentTime:0,
             duration:0,
             isPaused:false,
@@ -134,7 +133,14 @@ export default {
                 this.$refs.audio.muted = false
         },
         musicUrl(){
-            this.isPaused = true
+            if(this.musicUrl)
+                this.isPaused = true
+            else{
+                this.isPaused = false
+                this.duration = 0
+                this.$refs.audio.currentTime = 0
+                this.currentTime = 0
+            }
         }
     }
 }

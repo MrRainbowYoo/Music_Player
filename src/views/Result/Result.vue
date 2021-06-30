@@ -105,6 +105,11 @@ export default {
             loading:true        
         }
     },
+    computed:{
+        musicQueue(){
+            return this.$store.state.musicQueue
+        }
+    },
     methods:{
         toMvDetail(id){
             this.$router.push(`/mvdetail?id=${id}`)
@@ -184,7 +189,15 @@ export default {
 
                 this.$store.commit("changeMusicUrl",this.songUrl)
                 this.$store.commit("changeMusicInfo",musicInfo)
-                this.$store.commit('changeMusicQueue',musicInfo)                      
+                this.$store.commit('changeMusicStatus',false)
+                this.$store.commit('changeMusicQueue',musicInfo)
+
+                let ids = []
+                for (const item of this.musicQueue) {
+                    ids.push(item.id)
+                }
+                this.$store.commit("changeNowIndex",ids.indexOf(musicInfo.id))
+
 
                 }else{
                     this.$message({

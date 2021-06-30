@@ -11,7 +11,8 @@ const store = new Vuex.Store({
         globalCurrentTime:0,
         isMusicPaused:true,
         musicQueue:[],
-        nowIndex:0
+        nowIndex:0,
+        deleteToNext:false
     },
     mutations
 })

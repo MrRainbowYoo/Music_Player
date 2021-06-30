@@ -76,6 +76,11 @@ export default {
       this.loading = false
     }, 500);
   },
+  computed:{
+    musicQueue(){
+      return this.$store.state.musicQueue
+    }
+  },
   methods: {
     play(row){
       console.log(row)
@@ -107,7 +112,14 @@ export default {
           }
 
           this.$store.commit("changeMusicUrl",this.songUrl)
-          this.$store.commit("changeMusicInfo",musicInfo)          
+          this.$store.commit("changeMusicInfo",musicInfo)
+          this.$store.commit("changeMusicStatus",false)
+          this.$store.commit("changeMusicQueue",musicInfo)
+          let ids = []
+          for (const item of this.musicQueue) {
+              ids.push(item.id)
+          }
+          this.$store.commit("changeNowIndex",ids.indexOf(musicInfo.id))                    
 
         }else{
             this.$message({
