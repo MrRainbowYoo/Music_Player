@@ -12,17 +12,54 @@
             prefix-icon="el-icon-search"
             clearable
             @keyup.enter.native="search"
+            @focus="getSearchHot"
+            @blur="showHot = false"
             >
             </el-input>
+        </div>
+        <div class="search-hot" v-show="showHot" ref="hot" @mousedown.stop="prevent">
+            <el-scrollbar style="height:100%">
+                <div class="history" v-if="history.length">
+                    <span class="hot-title" style="display: inline-block;margin-right: 5px;">搜索历史</span>
+                    <span class="iconfont icon-lajitong" style="cursor:pointer" title="清空搜索历史" @mousedown="deleteHistory(0,true)"></span>
+                    <div class="history-wrap">
+                        <div class="history-item" v-for="(item,index) in history" :key="index" @mousedown="toHot(item)">
+                            {{item}}
+                            <span class="delete-btn" title="删除" @mousedown.stop="deleteHistory(index,false)">x</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="hot-title">热搜榜</div>
+                <ul>
+                    <li class="hot-item" v-for="(item,index) in hotData" :key="index" @mousedown.prevent="toHot(item.searchWord)">
+                        <div class="hot-index">{{index+1}}</div>
+                        <div class="hot-info">
+                            <div class="hot-top">
+                                <div class="hot-name">{{item.searchWord}}</div>
+                                <div class="hot-score">{{item.score}}</div>
+                                <img class="hot-icon" v-show="item.iconUrl && item.iconType!=5" :src="item.iconUrl"/>
+                            </div>
+                            <div class="hot-content">{{item.content}}</div>
+                        </div>
+                    </li>
+                </ul>
+            </el-scrollbar>
         </div>
     </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
     data(){
         return {
-            searchValue:""
+            searchValue:"",
+            showHot:false,
+            hotData:[],
+            history:[]
         }
     },
     methods:{
@@ -30,8 +67,11 @@ export default {
             // alert(this.searchValue)
             if(this.isNull(this.searchValue))
                 this.open4()
-            else
+            else{
                 this.$router.push({path:`/result?keywords=${this.searchValue}`})
+                if(!this.history.includes(this.searchValue))
+                    this.history.push(this.searchValue)
+            }
         },
         open4() {
             this.$message({
@@ -48,8 +88,38 @@ export default {
         },
         go(n) {
             this.$router.go(n)
-        }                
-    }
+        },
+        getSearchHot(){
+            this.showHot=true
+            if(this.hotData.length == 0)
+                axios({
+                    url:this.URL+'/search/hot/detail',
+                    method:'get'
+                }).then(res=>{
+                    console.log(res)
+                    this.hotData = res.data.data
+                })
+        },
+        toHot(value){
+            this.searchValue = value
+            this.search()
+            //阻止blur事件 也可以用@mousedown.prevent; mousedown的优先级高于blur
+            // event.preventDefault();
+        },
+        deleteHistory(index,all){
+            if(all)
+                this.history = []
+            else
+                for(let i=0;i<this.history.length;i++){
+                    if(i == index)
+                        this.history.splice(i,1)
+                }
+            event.preventDefault();
+        },
+        prevent(){
+            event.preventDefault();
+        }  
+    },
 }
 </script>
 
@@ -100,4 +170,92 @@ export default {
         color: #fff;
     }
 
+    .search-hot {
+        width: 400px;
+        height: 300px;
+        /* border: 1px solid #333; */
+        box-shadow: 0 0 5px 2px rgba(0, 0, 0,.3);
+        border-radius: 10px;
+        background-color: #fff;
+        position: absolute;
+        top: 55px;
+        right: 30px;
+        z-index: 1;
+        padding: 10px 10px;
+        box-sizing: border-box;
+    }
+
+    .hot-title {
+        margin: 10px 0;
+        font-weight: bold;
+    }
+
+    .hot-item {
+        display: flex;
+        align-items: center;
+        padding: 5px;
+    }
+
+    .hot-item:hover {
+        background-color: seashell;
+    }
+
+    .hot-index {
+        font-size: 20px;
+        color: rgb(236, 65, 65);
+        margin-right: 15px;
+    }
+
+    .hot-info {
+        flex: 1;
+        font-size: 12px;
+        color: slategray;
+    }
+
+    .hot-top {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+    }
+
+    .hot-name {
+        font-size: 16px;
+        margin-right: 15px;
+        color: #000;
+    }
+
+    .hot-icon {
+        width: 30px;
+        /* height: 15px; */
+        margin-left: 5px;
+    }
+
+    .history-wrap {
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .history-item {
+        border: 1px solid #ddd;
+        padding: 5px 10px;
+        border-radius: 10px;
+        font-size: 13px;
+        display: inline-block;
+        cursor: pointer;
+        margin: 5px;
+    }
+
+    .history-item:hover {
+        background-color: #F5F7FA;
+    }
+
+    .history-item:hover .delete-btn{
+        opacity: 1;
+    }
+
+    .delete-btn {
+        cursor: pointer;
+        opacity: 0;
+    }
 </style>

@@ -1,6 +1,6 @@
 @font-face {
   font-family: "iconfont"; /* Project id  */
-  src: url('iconfont.ttf?t=1625060289840') format('truetype');
+  src: url('iconfont.ttf?t=1625120574940') format('truetype');
 }
 
 .iconfont {
@@ -65,5 +65,9 @@
 
 .icon-play:before {
   content: "\e665";
+}
+
+.icon-lajitong:before {
+  content: "\e76e";
 }
 

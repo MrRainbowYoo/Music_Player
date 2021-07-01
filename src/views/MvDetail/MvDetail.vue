@@ -23,7 +23,7 @@
             <h4 class="head">热门评论({{hotComments.length}})</h4>
                         <ul>
                             <li v-for="(item,index) in hotComments" :key="index">
-                                <img :src="item.user.avatarUrl" alt="" class="comment-avatar">
+                                <img v-lazy="item.user.avatarUrl" alt="" class="comment-avatar">
                                 <div class="comment-info">
                                     <div class="comment">
                                         <span class="comment-user">{{item.user.nickname}}:</span>
@@ -46,7 +46,7 @@
             <h4 class="head">最新评论({{this.total}})</h4>
                         <ul>
                             <li v-for="(item,index) in comments" :key="index">
-                                <img :src="item.user.avatarUrl" alt="" class="comment-avatar">
+                                <img v-lazy="item.user.avatarUrl" alt="" class="comment-avatar">
                                 <div class="comment-info">
                                     <div class="comment">
                                         <span class="comment-user">{{item.user.nickname}}:</span>

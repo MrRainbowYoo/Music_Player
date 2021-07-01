@@ -78,7 +78,7 @@
                         <h4 class="comment-title">最热评论({{hotComments.length}})</h4>
                         <ul>
                             <li v-for="(item,index) in hotComments" :key="index">
-                                <img :src="item.user.avatarUrl" alt="" class="comment-avatar">
+                                <img v-lazy="item.user.avatarUrl" alt="" class="comment-avatar">
                                 <div class="comment-info">
                                     <div class="comment">
                                         <span class="comment-user">{{item.user.nickname}}:</span>
@@ -101,7 +101,7 @@
                         <h4 class="comment-title">最新评论({{playlistInfo.commentCount-hotComments.length}})</h4>
                         <ul>
                             <li v-for="(item,index) in comments" :key="index">
-                                <img :src="item.user.avatarUrl" alt="" class="comment-avatar">
+                                <img v-lazy="item.user.avatarUrl" alt="" class="comment-avatar">
                                 <div class="comment-info">
                                     <div class="comment">
                                         <span class="comment-user">{{item.user.nickname}}:</span>

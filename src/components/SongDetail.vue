@@ -81,8 +81,9 @@ export default {
                             })
                     }
                     this.lyric = lyric
+                    console.log(res.data.lrc.lyric)
                 }
-                // console.log(res.data.lrc.lyric)
+                
             })
         },
         timeFormat(time){
@@ -162,6 +163,7 @@ export default {
         z-index: 1; */
 
         background: linear-gradient(to left top, rgb(60, 50, 62), rgb(77, 70, 88));
+        /* background: linear-gradient(to left top, rgb(133, 68, 62), rgb(181, 97, 131)); */
         position: fixed;
         top: 100%;
         color: #fff;
