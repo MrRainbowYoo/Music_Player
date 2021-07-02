@@ -157,6 +157,9 @@ export default {
                     message: '对不起，歌曲暂时无法播放。',
                     type: 'error'
                     });
+                    // 若下一首没有版权，则自动跳到后一首歌;但是如果换做上一首没有版权，则无法跳到前一首，待解决这个bug
+                    let nextIndex = (this.nowIndex + 1) % this.musicQueue.length
+                    this.$store.commit('changeNowIndex',nextIndex)
                 }
             })
 
@@ -192,6 +195,8 @@ export default {
                 this.$store.commit("changeMusicInfo",{})
                 this.$store.commit("changeMusicStatus",true)
                 this.$store.commit("changeCurrentTime",0)
+                // 如果打开歌词页面 则关闭
+                this.$parent.show = true
                 setTimeout(() => {
                 this.$store.commit('clearMusicQueue')               
                 }, 100);           
@@ -262,6 +267,7 @@ export default {
         background-color: #fff;
         font-weight: 200;
         color: #363636;
+        cursor: pointer;
     }
 
     .playingIcon {

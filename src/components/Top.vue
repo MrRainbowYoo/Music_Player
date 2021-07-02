@@ -25,7 +25,7 @@
                     <div class="history-wrap">
                         <div class="history-item" v-for="(item,index) in history" :key="index" @mousedown="toHot(item)">
                             {{item}}
-                            <span class="delete-btn" title="删除" @mousedown.stop="deleteHistory(index,false)">x</span>
+                            <span class="delete-btn" title="删除" @mousedown.stop="deleteHistory(index,false)">×</span>
                         </div>
                     </div>
                 </div>

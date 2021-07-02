@@ -117,17 +117,27 @@ export default {
                     showClose:true
                 })
             else {
-                let ids = []
-                for (const item of this.musicQueue) {
-                    ids.push(item.id)
-                }
-                // console.log(ids)
-                let nowIndex = ids.indexOf(this.globalMusicInfo.id)
-                // console.log(nowIndex)
-                let nextIndex = (nowIndex + 1) % this.musicQueue.length
-                // let nextId = this.musicQueue[nextIndex].id
-                this.$store.commit('changeNowIndex',nextIndex)
-                this.$store.commit('changeMusicStatus',false)                           
+                if(this.musicQueue.length == 1){
+                    // 若播放列表只有一首歌 则单曲循环
+                    this.currentTime = 0
+                    let musicUrl = this.globalMusicUrl
+                    this.$store.commit('changeMusicUrl',"")
+                    setTimeout(() => {
+                        this.$store.commit('changeMusicUrl',musicUrl)
+                    }, 0);
+                }else{
+                    let ids = []
+                    for (const item of this.musicQueue) {
+                        ids.push(item.id)
+                    }
+                    // console.log(ids)
+                    let nowIndex = ids.indexOf(this.globalMusicInfo.id)
+                    // console.log(nowIndex)
+                    let nextIndex = (nowIndex + 1) % this.musicQueue.length
+                    // let nextId = this.musicQueue[nextIndex].id
+                    this.$store.commit('changeNowIndex',nextIndex)
+                    this.$store.commit('changeMusicStatus',false)  
+                }                         
             }
         },
         prev(){
@@ -137,15 +147,24 @@ export default {
                     message:'播放列表是空的~',
                     showClose:true
                 })
-            else {            
+            else {
+                if(this.musicQueue.length == 1){
+                    this.currentTime = 0
+                    let musicUrl = this.globalMusicUrl
+                    this.$store.commit('changeMusicUrl',"")
+                    setTimeout(() => {
+                        this.$store.commit('changeMusicUrl',musicUrl)
+                    }, 0);
+                }else{                            
                 let ids = []
-                for (const item of this.musicQueue) {
-                    ids.push(item.id)
-                }
-                let nowIndex = ids.indexOf(this.globalMusicInfo.id)
-                let prevIndex = (nowIndex - 1) % this.musicQueue.length < 0 ? ((nowIndex - 1) % this.musicQueue.length + this.musicQueue.length) : (nowIndex - 1) % this.musicQueue.length
-                this.$store.commit('changeNowIndex',prevIndex)
-                this.$store.commit('changeMusicStatus',false)  
+                    for (const item of this.musicQueue) {
+                        ids.push(item.id)
+                    }
+                    let nowIndex = ids.indexOf(this.globalMusicInfo.id)
+                    let prevIndex = (nowIndex - 1) % this.musicQueue.length < 0 ? ((nowIndex - 1) % this.musicQueue.length + this.musicQueue.length) : (nowIndex - 1) % this.musicQueue.length
+                    this.$store.commit('changeNowIndex',prevIndex)
+                    this.$store.commit('changeMusicStatus',false)
+                }  
             }
         }
     },
