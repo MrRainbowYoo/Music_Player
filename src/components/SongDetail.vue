@@ -1,12 +1,12 @@
 <template>
     <transition leave-active-class="closeWindow">
-        <div class="song-detail" v-show="!show">
+        <div class="song-detail" v-show="!show" ref="bg">
             <i class="el-icon-arrow-down" @click="close"></i>
             <div class="content">
                 <div class="img-box">
                     <img :src="playerBar" alt="" :class="{'player-bar isplay':!isMusicPaused,'player-bar':isMusicPaused}">
                     <div class="img-wrap-rotate">
-                        <img :src="globalMusicInfo.imgUrl?globalMusicInfo.imgUrl:defaultImgUrl" alt="" :class="{'running':!isMusicPaused,'paused':isMusicPaused}">
+                        <img :src="globalMusicInfo.imgUrl?globalMusicInfo.imgUrl:defaultImgUrl" alt="" :class="{'running':!isMusicPaused,'paused':isMusicPaused}" crossorigin="anonymous" ref="cover">
                     </div>
                 </div>
                 
@@ -19,15 +19,18 @@
                         </el-scrollbar>
                         <p v-if="!hasLyric">抱歉，暂无歌词</p>
                     </div>
-
                 </div>
             </div>
+            <!-- <ul style="display:flex">
+                <li v-for="(item,index) in colors" :key="index" :style="`backgroundColor:rgb(${item[0]},${item[1]},${item[2]})`">{{item}}</li>
+            </ul> -->
         </div>
     </transition>
 </template>
 
 <script>
 import axios from 'axios'
+import ColorThief from 'colorthief'
 
 export default {
     data(){
@@ -37,6 +40,7 @@ export default {
             lyric:[],
             currentIndex:0,
             hasLyric:true,
+            colors:[]
         }
     },
     props:{
@@ -45,6 +49,18 @@ export default {
     methods:{
         close(){
             this.$parent.show = true
+        },
+        getColor(){
+            let img = this.$refs.cover
+
+            img.addEventListener('load',()=>{
+                let colorthief = new ColorThief()
+                this.colors = colorthief.getPalette(img,2)
+                console.dir(this.colors)    
+                this.$refs.bg.style.background = `linear-gradient(to left top, 
+                                                rgb(${this.colors[0][0]},${this.colors[0][1]},${this.colors[0][2]}), 
+                                                rgb(${this.colors[1][0]},${this.colors[1][1]},${this.colors[1][2]}))`                                 
+            })
         },
         getLyric(id){
             axios({
@@ -56,6 +72,9 @@ export default {
             }).then(res=>{
                 console.log(res)
                 let _this = this
+                setTimeout(() => {
+                 this.getColor()                   
+                }, 0);
                 if(!Object.hasOwnProperty.call(res.data,'lrc')){
                     _this.hasLyric = false
                 }

@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "colorthief": "^2.3.2",
     "core-js": "^3.6.5",
     "el-table-infinite-scroll": "^1.0.10",
     "element-ui": "^2.15.2",
