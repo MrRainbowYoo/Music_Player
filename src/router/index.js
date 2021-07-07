@@ -10,6 +10,7 @@ import Result from '@/views/Result/Result.vue'
 import Playlist from '@/views/Playlist/Playlist.vue'
 import MvDetail from '@/views/MvDetail/MvDetail.vue'
 import Artist from '@/views/Artist/Artist.vue'
+import Album from '@/views/Album/Album.vue'
 
 Vue.use(VueRouter)
 
@@ -55,6 +56,10 @@ const routes = [
   {
     path:'/artist',
     component:Artist
+  },
+  {
+    path:'/album',
+    component:Album
   }
 ]
 

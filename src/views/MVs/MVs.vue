@@ -154,9 +154,6 @@ export default {
     padding: 20px;
   }
 
-  .filter-wrap {
-  }
-
   .section-wrap {
     display: flex;
     align-items: center;
@@ -240,6 +237,7 @@ export default {
       top: 5px;
       right: 5px;
       color: #fff;
+      text-shadow: 0 0 2px rgb(0, 0, 0);      
   }
 
   .play-count::before {

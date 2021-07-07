@@ -408,10 +408,11 @@ export default {
   }
 
   .play-count{
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      color: #fff;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: #fff;
+    text-shadow: 0 0 2px rgb(0, 0, 0);      
   }
 
   .play-count::before {

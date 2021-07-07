@@ -17,7 +17,7 @@
                         </div>
                         <span :class="{'playingIcon iconfont icon-zanting':isMusicPaused && item.id==globalMusicInfo.id}"></span>
                         <span class="queue-song-name">{{item.songName}}</span>
-                        <span class="queue-song-singer">{{item.singer}}</span>
+                        <span class="queue-song-singer" @click.stop="toArtist(item.artistId)">{{item.singer}}</span>
                         <span class="queue-song-duration">{{item.duration}}</span>
                         <span class="queue-song-delete" @click="deleteQueue(item.id)">×</span>
                     </li>
@@ -44,6 +44,9 @@ export default {
       handleClick(tab, event) {
             console.log(tab, event);
       },
+        toArtist(id){
+            this.$router.push(`/artist?artistId=${id}`)
+        },         
       deleteQueue(id){
         //   console.log(id)
         this.$confirm('确定删除该歌曲吗?', '提示', {
@@ -343,6 +346,7 @@ export default {
     .queue-song-name {
         width: 40%;
         margin-left: 25px;
+        margin-right: 20px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -353,6 +357,7 @@ export default {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        color: #2980b9;
     }
 
     .queue-song-duration {

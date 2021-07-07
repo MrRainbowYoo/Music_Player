@@ -21,9 +21,17 @@
 
           <el-table-column prop="songName" label="音乐标题" width=""></el-table-column>
 
-          <el-table-column prop="singer" label="歌手" width=""></el-table-column>
+          <el-table-column prop="singer" label="歌手" width="">
+              <template slot-scope="scope">
+                  <span style="cursor:pointer;color:#2980b9;" @click="toArtist(scope.row.artistId)">{{scope.row.singer}}</span>
+              </template>                                  
+          </el-table-column>
 
-          <el-table-column prop="album" label="专辑" ></el-table-column>
+          <el-table-column prop="album" label="专辑" width="">
+              <template slot-scope="scope">
+                  <span style="cursor:pointer;color:#2980b9;" @click="toAlbum(scope.row.albumId)">{{scope.row.album}}</span>
+              </template>                                  
+          </el-table-column>          
 
           <el-table-column prop="duration" label="时长" width="100"></el-table-column>                            
       </el-table>   
@@ -63,7 +71,9 @@ export default {
               id:item.id,
               songName:item.name,
               singer:item.artists[0].name,
+              artistId:item.artists[0].id,
               album:item.album.name,
+              albumId:item.album.id,
               imgUrl:item.album.picUrl,
               duration,
               mp3Url:item.mp3Url
@@ -82,6 +92,12 @@ export default {
     }
   },
   methods: {
+    toArtist(id){
+        this.$router.push(`/artist?artistId=${id}`)
+    },
+    toAlbum(id){
+        this.$router.push(`/album?id=${id}`)
+    },                
     play(row){
       console.log(row)
       let id = row.id
@@ -107,6 +123,7 @@ export default {
             imgUrl:row.imgUrl,
             singer:row.singer,
             songName:row.songName,
+            artistId:row.artistId,
             id:row.id,
             duration:row.duration            
           }

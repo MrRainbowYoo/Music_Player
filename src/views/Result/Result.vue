@@ -24,11 +24,15 @@
                                 </template>
                             </el-table-column>
 
-                            <el-table-column prop="singer" label="歌手" width=""></el-table-column>
+                            <el-table-column prop="singer" label="歌手" width="">
+                                <template slot-scope="scope">
+                                    <span style="cursor:pointer;color:#2980b9;" @click="toArtist(scope.row.artistId)">{{scope.row.singer}}</span>
+                                </template>                                  
+                            </el-table-column>
 
                             <el-table-column prop="album" label="专辑" >
                                 <template slot-scope="scope" style="">
-                                    <span>{{scope.row.album}}</span>
+                                    <span style="cursor:pointer;color:#2980b9;" @click="toAlbum(scope.row.albumId)">{{scope.row.album}}</span>
                                     <span class="plus" title="添加至歌单" @click="addToQueue(scope.row,$event)">+</span>
                                 </template>
                             </el-table-column>
@@ -124,7 +128,13 @@ export default {
         },              
         toPlaylistDetail(id){
             this.$router.push(`/playlist?id=${id}`)
-        },            
+        },
+        toArtist(id){
+            this.$router.push(`/artist?artistId=${id}`)
+        },
+        toAlbum(id){
+            this.$router.push(`/album?id=${id}`)
+        },                        
         handleCurrentChange(page){
             this.page = page
             this.getTableData(this.type)
@@ -136,6 +146,7 @@ export default {
                 imgUrl:row.imgUrl,
                 duration:row.duration,
                 singer:row.singer,
+                artistId:row.artistId,
                 songName:row.songName
             }
             
@@ -271,7 +282,9 @@ export default {
                                 id:item.id,
                                 songName:item.name,
                                 singer:item.ar[0].name,
+                                artistId:item.ar[0].id,
                                 album:item.al.name,
+                                albumId:item.al.id,
                                 mvId:item.mv,
                                 imgUrl:item.al.picUrl,
                                 alia:item.alia,
