@@ -12,7 +12,9 @@
                 
                 <div class="song-wrap">
                     <h2>{{globalMusicInfo.songName}}</h2>
-                    <span class="song-info">{{globalMusicInfo.singer}}</span>
+                    <div style="margin:5px 0 60px 0">
+                        <span class="song-info" v-for="(singer,i) in globalMusicInfo.artistInfo" :key="i">{{singer.name}} </span>
+                    </div>
                     <div class="lyric-wrap">
                         <el-scrollbar style="height:100%" v-if="hasLyric" ref="scroll">
                             <p v-for="(item,index) in lyric" :key="index" :class="{'active-lyric':currentIndex===index}">{{item.lyricWords}}</p>
@@ -57,7 +59,7 @@ export default {
                 let colorthief = new ColorThief()
                 this.colors = colorthief.getPalette(img,2)
                 console.dir(this.colors)    
-                this.$refs.bg.style.background = `linear-gradient(to left top, 
+                this.$refs.bg.style.background = `linear-gradient(to right bottom, 
                                                 rgb(${this.colors[0][0]},${this.colors[0][1]},${this.colors[0][2]}), 
                                                 rgb(${this.colors[1][0]},${this.colors[1][1]},${this.colors[1][2]}))`                                 
             })
@@ -71,10 +73,15 @@ export default {
                 }
             }).then(res=>{
                 console.log(res)
+
                 let _this = this
-                setTimeout(() => {
-                 this.getColor()                   
-                }, 0);
+                this.$nextTick(()=>{
+                    _this.getColor()
+                })
+                // setTimeout(() => {
+                //  this.getColor()                   
+                // }, 0);
+
                 if(!Object.hasOwnProperty.call(res.data,'lrc')){
                     _this.hasLyric = false
                 }

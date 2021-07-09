@@ -59,10 +59,10 @@
 
                             <el-table-column prop="name" label="音乐标题" width=""></el-table-column>
 
-                            <el-table-column prop="ar[0].name" label="歌手" width="">
+                            <el-table-column prop="artistInfo" label="歌手" width="">
                                 <template slot-scope="scope">
-                                    <span style="cursor:pointer;color:#2980b9;" @click="toArtist(scope.row.ar[0].id)">{{scope.row.ar[0].name}}</span>
-                                </template>                                
+                                    <div v-for="(singer,i) in scope.row.ar" :key="i" style="cursor:pointer;color:#2980b9;display:inline-block" @click="toArtist(singer.id)">{{singer.name}}<span style="color:#606266;margin:0 5px" v-show="scope.row.ar.length != 1 && i!=scope.row.ar.length-1">/</span></div>
+                                </template>                                                                 
                             </el-table-column>                            
 
                             <el-table-column prop="al.name" label="专辑" >
@@ -233,8 +233,9 @@ export default {
                 id:row.id,
                 imgUrl:row.al.picUrl,
                 duration:row.dt,
-                singer:row.ar[0].name,
-                artistId:row.ar[0].id,
+                artistInfo:row.ar,
+                // singer:row.ar[0].name,
+                // artistId:row.ar[0].id,
                 songName:row.name
             }
 
@@ -363,7 +364,8 @@ export default {
                 
                 let musicInfo = {
                     imgUrl:row.al.picUrl,
-                    singer:row.ar[0].name,
+
+                    artistInfo:row.ar,
                     songName:row.name,
                     id:row.id,
                     duration:row.dt              
@@ -432,7 +434,8 @@ export default {
                     duration:item.dt,
                     id:item.id,
                     imgUrl:item.al.picUrl,
-                    singer:item.ar[0].name,
+                    artistInfo:item.ar,
+                    // singer:item.ar[0].name,
                     songName:item.name
                 }
                 this.$store.commit('changeMusicQueue',obj)

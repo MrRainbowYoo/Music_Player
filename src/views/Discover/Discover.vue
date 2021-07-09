@@ -30,7 +30,7 @@
 
                     <div class="music-info">
                         <p class="music-name">{{item.name}}</p>
-                        <p class="music-singer">{{item.song.artists[0].name}}</p>
+                        <p class="music-singer" v-for="(singer,i) in item.song.artists" :key="i">{{singer.name}}</p>
                     </div>
                 </li>                                                                                                                       
             </ul>
@@ -142,7 +142,8 @@ export default {
 
                 let musicInfo = {
                     imgUrl:item.picUrl,
-                    singer:item.song.artists[0].name,
+                    // singer:item.song.artists[0].name,
+                    artistInfo:item.song.artists,
                     songName:item.name,
                     id:item.id,
                     duration:this.timeFormat(item.song.duration)                    

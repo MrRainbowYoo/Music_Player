@@ -17,7 +17,11 @@
                         </div>
                         <span :class="{'playingIcon iconfont icon-zanting':isMusicPaused && item.id==globalMusicInfo.id}"></span>
                         <span class="queue-song-name">{{item.songName}}</span>
-                        <span class="queue-song-singer" @click.stop="toArtist(item.artistId)">{{item.singer}}</span>
+
+                        <div class="queue-song-singer">
+                            <span v-for="(singer,i) in item.artistInfo" :key="i" @click.stop="toArtist(singer.id)">{{singer.name}} </span>
+                        </div>
+
                         <span class="queue-song-duration">{{item.duration}}</span>
                         <span class="queue-song-delete" @click="deleteQueue(item.id)">×</span>
                     </li>
@@ -141,7 +145,8 @@ export default {
                     id:item.id,
                     imgUrl:item.imgUrl,
                     songName:item.songName,
-                    singer:item.singer,
+                    artistInfo:item.artistInfo,
+                    // singer:item.singer,
                     duration:item.duration
                 }
                 this.$store.commit("changeMusicUrl",songUrl)

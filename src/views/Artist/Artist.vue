@@ -87,10 +87,6 @@ export default {
 
         this.getAlbumData()
         this.getMVData()
-
-        setTimeout(() => {
-            this.loading = false
-        }, 0);
     },
     methods:{
         handleClick(tab) {
@@ -121,6 +117,10 @@ export default {
                     picUrl:res.data.artist.picUrl
                 }
                 this.albumData = res.data.hotAlbums
+
+            setTimeout(() => {
+                this.loading = false
+            }, 0);                
             })
         },
         getMVData(){

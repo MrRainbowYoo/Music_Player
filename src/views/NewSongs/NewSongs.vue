@@ -21,11 +21,11 @@
 
           <el-table-column prop="songName" label="音乐标题" width=""></el-table-column>
 
-          <el-table-column prop="singer" label="歌手" width="">
-              <template slot-scope="scope">
-                  <span style="cursor:pointer;color:#2980b9;" @click="toArtist(scope.row.artistId)">{{scope.row.singer}}</span>
-              </template>                                  
-          </el-table-column>
+                            <el-table-column label="歌手" width="">
+                                <template slot-scope="scope">
+                                    <div v-for="(x,i) in scope.row.artistInfo" :key="i" style="cursor:pointer;color:#2980b9;display:inline-block" @click="toArtist(x.id)">{{x.name}}<span style="color:#606266;margin:0 5px" v-show="scope.row.artistInfo.length != 1 && i!=scope.row.artistInfo.length-1">/</span></div>                                    
+                                </template>                                  
+                            </el-table-column>
 
           <el-table-column prop="album" label="专辑" width="">
               <template slot-scope="scope">
@@ -70,8 +70,9 @@ export default {
           let song = {
               id:item.id,
               songName:item.name,
-              singer:item.artists[0].name,
-              artistId:item.artists[0].id,
+              // singer:item.artists[0].name,
+              // artistId:item.artists[0].id,
+              artistInfo:item.artists,
               album:item.album.name,
               albumId:item.album.id,
               imgUrl:item.album.picUrl,
@@ -121,7 +122,8 @@ export default {
 
           let musicInfo = {
             imgUrl:row.imgUrl,
-            singer:row.singer,
+            artistInfo:row.artistInfo,
+            // singer:row.singer,
             songName:row.songName,
             artistId:row.artistId,
             id:row.id,

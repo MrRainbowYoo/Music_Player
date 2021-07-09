@@ -24,9 +24,9 @@
                                 </template>
                             </el-table-column>
 
-                            <el-table-column prop="singer" label="歌手" width="">
+                            <el-table-column prop="artistInfo" label="歌手" width="">
                                 <template slot-scope="scope">
-                                    <span style="cursor:pointer;color:#2980b9;" @click="toArtist(scope.row.artistId)">{{scope.row.singer}}</span>
+                                    <div v-for="(x,i) in scope.row.artistInfo" :key="i" style="cursor:pointer;color:#2980b9;display:inline-block" @click="toArtist(x.id)">{{x.name}}<span style="color:#606266;margin:0 5px" v-show="scope.row.artistInfo.length != 1 && i!=scope.row.artistInfo.length-1">/</span></div>                                    
                                 </template>                                  
                             </el-table-column>
 
@@ -145,8 +145,9 @@ export default {
                 id:row.id,
                 imgUrl:row.imgUrl,
                 duration:row.duration,
-                singer:row.singer,
-                artistId:row.artistId,
+                artistInfo:row.artistInfo,
+                // singer:row.artistInfo[0].name,
+                // artistId:row.artistId,
                 songName:row.songName
             }
             
@@ -223,7 +224,8 @@ export default {
 
                 let musicInfo = {
                     imgUrl:row.imgUrl,
-                    singer:row.singer,
+                    // singer:row.artistInfo[0].name,
+                    artistInfo:row.artistInfo,
                     songName:row.songName,
                     id:row.id,
                     duration:row.duration                    
@@ -281,8 +283,11 @@ export default {
                             var song = {
                                 id:item.id,
                                 songName:item.name,
-                                singer:item.ar[0].name,
-                                artistId:item.ar[0].id,
+
+                                // singer:item.ar[0].name,
+                                // artistId:item.ar[0].id,
+                                artistInfo:item.ar,
+
                                 album:item.al.name,
                                 albumId:item.al.id,
                                 mvId:item.mv,

@@ -6,7 +6,10 @@
         </div>
         <div class="music-info" v-show="globalMusicInfo.songName">
             <span class="music-name" :title="globalMusicInfo.songName">{{globalMusicInfo.songName}}</span>
-            <span class="music-singer" :title="globalMusicInfo.singer">{{globalMusicInfo.singer}}</span>
+            
+            <div class="music-singer">
+                <span v-for="(singer,i) in globalMusicInfo.artistInfo" :key="i+99">{{singer.name}} </span>
+            </div>
         </div>
         <span class="music-name" v-show="!globalMusicInfo.songName" style="line-height:50px">还没有播放音乐哦</span>
       </div>
