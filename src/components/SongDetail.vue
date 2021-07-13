@@ -58,7 +58,7 @@ export default {
             img.addEventListener('load',()=>{
                 let colorthief = new ColorThief()
                 this.colors = colorthief.getPalette(img,2)
-                console.dir(this.colors)    
+                // console.dir(this.colors)    
                 this.$refs.bg.style.background = `linear-gradient(to right bottom, 
                                                 rgb(${this.colors[0][0]},${this.colors[0][1]},${this.colors[0][2]}), 
                                                 rgb(${this.colors[1][0]},${this.colors[1][1]},${this.colors[1][2]}))`                                 
@@ -239,7 +239,6 @@ export default {
 
     .content {
         display: flex;
-        padding: 10px 100px;
     }
 
     .content .img-box {
@@ -332,6 +331,7 @@ export default {
         flex: 1;
         display: flex;
         flex-direction: column;
+        height: 60vh;
     }
 
     .song-wrap h2 {
@@ -340,7 +340,7 @@ export default {
     }
 
     .lyric-wrap {
-        height: 600px;
+        height: 100%;
         width: 80%;
     }
 

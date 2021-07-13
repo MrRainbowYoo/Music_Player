@@ -220,7 +220,7 @@ export default {
     .queue {
         width: 25%;
         min-width: 300px;
-        height: 700px;
+        height: 70%;
         position: fixed;
         right: 10px;
         bottom: 59px;
