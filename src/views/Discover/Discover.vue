@@ -30,7 +30,7 @@
 
                     <div class="music-info">
                         <p class="music-name">{{item.name}}</p>
-                        <p class="music-singer" v-for="(singer,i) in item.song.artists" :key="i">{{singer.name}}</p>
+                        <p class="music-singer" v-for="(singer,i) in item.song.artists" :key="i" style="display:inline;margin:0 5px">{{singer.name}}</p>
                     </div>
                 </li>                                                                                                                       
             </ul>
@@ -55,8 +55,7 @@
 </template>
 
 <script>
-
-import axios from 'axios'
+import { bannerAPI,recommendSonglistAPI,recommendSongAPI,recommendMVAPI,playMusicAPI } from '@/utils/api'
 
 export default {
     data(){
@@ -75,40 +74,26 @@ export default {
     },
     created(){
         // 获取轮播图
-        axios({
-            url:this.URL+"/banner",
-            method:'get'
-        }).then(res=>{
-            // console.log(res)
+        bannerAPI().then(res=>{
             this.banners = res.data.banners
+        }).then(()=>{
+            this.loading = false
         })
 
         // 获取推荐歌单
-        axios({
-            url:this.URL+"/personalized",
-            method:'get',
-            params:{
-                limit:10
-            }
-        }).then(res=>{
+        recommendSonglistAPI({limit:10}).then(res=>{
             // console.log(res)
             this.recommendList = res.data.result
         })
 
         // 获取最新音乐
-        axios({
-            url:this.URL+"/personalized/newsong",
-            method:'get'
-        }).then(res=>{
+        recommendSongAPI().then(res=>{
             // console.log(res)
             this.newSongs = res.data.result
         })
 
         //获取推荐MV
-        axios({
-            url:this.URL+"/personalized/mv",
-            method:'get'
-        }).then(res=>{
+        recommendMVAPI().then(res=>{
             // console.log(res)
             this.newMvs = res.data.result
             for(let i=0;i<this.newMvs.length;i++){
@@ -116,10 +101,6 @@ export default {
                     this.newMvs[i].playCount = parseInt(this.newMvs[i].playCount/10000)+'万'
             }             
         })
-
-        setTimeout(() => {
-            this.loading = false
-        }, 500);
     },
     methods:{
         timeFormat(time){
@@ -129,13 +110,7 @@ export default {
         },
         playMusic(item){
             console.log(item)
-            axios({
-                url:this.URL+"/song/url",
-                method:'get',
-                params:{
-                    id:item.id
-                }
-            }).then(res=>{
+            playMusicAPI({id:item.id}).then(res=>{
                 // console.log(res)
                 if(res.data.data[0].url){
                 this.songUrl = res.data.data[0].url

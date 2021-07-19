@@ -2,7 +2,7 @@
     <div class="playlist"  v-loading="loading">
         <div class="playlist-top-card">
             <div class="playlist-img-wrap">
-                <img :src="albumInfo.picUrl" alt="">
+                <img v-lazy="albumInfo.picUrl" alt="">
             </div>
             <div class="playlist-info">
                 <div class="playlist-name">
@@ -30,11 +30,11 @@
 
                             <el-table-column prop="name" label="音乐标题" width=""></el-table-column>
 
-                            <el-table-column prop="ar[0].name" label="歌手" width="">
+                            <el-table-column prop="artistInfo" label="歌手" width="">
                                 <template slot-scope="scope">
-                                    <span style="cursor:pointer;color:#2980b9;" @click="toArtist(scope.row.ar[0].id)">{{scope.row.ar[0].name}}</span>
-                                </template>                                
-                            </el-table-column>                            
+                                    <div v-for="(singer,i) in scope.row.ar" :key="i" style="cursor:pointer;color:#2980b9;display:inline-block" @click="toArtist(singer.id)">{{singer.name}}<span style="color:#606266;margin:0 5px" v-show="scope.row.ar.length != 1 && i!=scope.row.ar.length-1">/</span></div>
+                                </template>                                                                 
+                            </el-table-column>                          
 
                             <el-table-column prop="al.name" label="专辑" >
                                 <template slot-scope="scope">
@@ -119,8 +119,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 import {formatDate,formatDateFully} from '../../utils/utils'
+import { albumAPI,playMusicAPI,commentsAPI } from '@/utils/api'
 
 export default {
     data(){
@@ -176,8 +176,9 @@ export default {
                 id:row.id,
                 imgUrl:row.al.picUrl,
                 duration:row.dt,
-                singer:row.ar[0].name,
-                artistId:row.ar[0].id,
+                // singer:row.ar[0].name,
+                // artistId:row.ar[0].id,
+                artistInfo:row.ar,
                 songName:row.name
             }
 
@@ -226,13 +227,7 @@ export default {
             }, 500);
         },                
         getTableData(){
-            axios({
-                url:this.URL+'/album',
-                method:'get',
-                params:{
-                    id:this.albumId
-                }
-            }).then(res=>{
+            albumAPI({id:this.albumId}).then(res=>{
                 console.log(res)
                 this.albumInfo = res.data.album
                 this.commentCount = this.albumInfo.info.commentCount
@@ -248,28 +243,21 @@ export default {
 
                 let albumDesc = this.albumInfo.description
                 this.albumDescList = albumDesc.split(/[\n]/)
-
-                // setTimeout(()=>{
-                //     this.loading = false
-                // },500)
+            }).then(()=>{
+                this.loading = false
             })
         },                
         play(row){
             console.log(row)
             let id = row.id
-            axios({
-                url:this.URL+"/song/url",
-                method: "get",
-                params:{
-                id
-                }
-            }).then(res=>{
+            playMusicAPI({id}).then(res=>{
                 if(res.data.data[0].url){
                 this.songUrl = res.data.data[0].url
                 
                 let musicInfo = {
                     imgUrl:row.al.picUrl,
-                    singer:row.ar[0].name,
+                    // singer:row.ar[0].name,
+                    artistInfo:row.ar,
                     songName:row.name,
                     id:row.id,
                     duration:row.dt              
@@ -297,15 +285,12 @@ export default {
         },        
         getComments(isFirst=false){
             this.loading = true
-            axios({
-                url:this.URL+'/comment/album',
-                method:'get',
-                params:{
-                    id:this.albumId,
-                    limit:this.pageSize,
-                    offset:(this.page-1)*this.pageSize
-                }
-            }).then(res=>{
+            let params = {
+                id:this.albumId,
+                limit:this.pageSize,
+                offset:(this.page-1)*this.pageSize                
+            }
+            commentsAPI(params,'album').then(res=>{
                 console.log(res)
 
                 for(let item of res.data.comments){
