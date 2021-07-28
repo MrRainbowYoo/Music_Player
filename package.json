@@ -1,7 +1,9 @@
 {
   "name": "musicplayer",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
+  "description": "a music player developed by Vue",
+  "author": "xiaochen",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

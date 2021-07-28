@@ -7,7 +7,7 @@
         </div>
         <div class="input-box">
             <el-input
-            placeholder="请输入内容"
+            placeholder="搜索"
             v-model="searchValue"
             prefix-icon="el-icon-search"
             clearable

@@ -19,6 +19,13 @@ Vue.use(Vuelazyload,{
 
 console.log = function(){}
 
+console.info(`%c
+欢迎使用小陈音乐！
+作者：小陈同学吗
+GitHub：https://github.com/MrRainbowYoo/Music_Player
+歌曲来源于网易云音乐(https://music.163.com)
+* 本项目仅供个人学习研究使用，禁止用于商业或非法用途。`,`color:#2980b9`)
+
 new Vue({
   router,
   store,

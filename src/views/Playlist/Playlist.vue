@@ -553,6 +553,25 @@ export default {
     width: 100%;
   }
 
+    /* 设置滚动条样式 */
+    /* 滚动条整体样式 */
+    .songs-table>>>::-webkit-scrollbar{
+        width: 5px;
+        height: 1px;
+    }
+    /* 滚动条里面的小方块 */
+    .songs-table>>>::-webkit-scrollbar-thumb{
+        border-radius: 4px;
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+        background: #f2f2f2;
+    }
+    /* 滚动条里面的轨道 选择不显示 */
+    .songs-table>>>::-webkit-scrollbar-track{
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+        background: #fff;
+    }
+
   .img-wrap {
     width: 60px;
     height: 60px;
