@@ -8,9 +8,9 @@
 > 请使用PC访问 **[在线演示](http://duoduozuikeail.top/)** (最好用Chrome)
 
 ## 💪网易云音乐NodeJS版API
-> 感谢开源项目 *NeteaseCloudMusicApi* 提供的支持
-[Github地址](https://github.com/Binaryify/NeteaseCloudMusicApi)
-[使用文档](https://binaryify.github.io/NeteaseCloudMusicApi/#/)
+> 感谢开源项目 *NeteaseCloudMusicApi* 提供的支持<br>
+> [Github地址](https://github.com/Binaryify/NeteaseCloudMusicApi)<br>
+> [使用文档](https://binaryify.github.io/NeteaseCloudMusicApi/#/)
 
 ## 👉技术栈
 - Vue
@@ -68,33 +68,33 @@
 - [ ] 用户登录
 - [ ] 收藏歌单
 
-## 💻部分界页面截图
+## 💻部分页面截图
 
-**发现音乐**
+**发现音乐**<br>
 [![发现音乐](https://z3.ax1x.com/2021/07/28/WT09sA.md.png)](https://imgtu.com/i/WT09sA)
 
-**推荐歌单**
+**推荐歌单**<br>
 [![推荐歌单](https://z3.ax1x.com/2021/07/28/WT0CqI.md.png)](https://imgtu.com/i/WT0CqI)
 
-**最新音乐**
+**最新音乐**<br>
 [![最新音乐](https://z3.ax1x.com/2021/07/28/WT0kIf.md.png)](https://imgtu.com/i/WT0kIf)
 
-**最新MV**
+**最新MV**<br>
 [![最新MV](https://z3.ax1x.com/2021/07/28/WT0iZt.md.png)](https://imgtu.com/i/WT0iZt)
 
-**搜索结果**
+**搜索结果**<br>
 [![搜索结果](https://z3.ax1x.com/2021/07/28/WTwxRe.md.png)](https://imgtu.com/i/WTwxRe)
 
-**歌词详情**
+**歌词详情**<br>
 [![歌词详情](https://z3.ax1x.com/2021/07/28/WT0ZRg.md.png)](https://imgtu.com/i/WT0ZRg)
 
-**播放列表**
+**播放列表**<br>
 [![播放列表](https://z3.ax1x.com/2021/07/28/WT0FdP.md.png)](https://imgtu.com/i/WT0FdP)
 
-**MV详情**
+**MV详情**<br>
 [![MV详情](https://z3.ax1x.com/2021/07/28/WT0Ei8.md.png)](https://imgtu.com/i/WT0Ei8)
 
-**歌手详情**
+**歌手详情**<br>
 [![歌手详情](https://z3.ax1x.com/2021/07/28/WT0pMd.md.png)](https://imgtu.com/i/WT0pMd)
 
 <!-- **热搜榜与搜索历史**
