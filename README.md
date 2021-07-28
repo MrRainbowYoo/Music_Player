@@ -105,7 +105,7 @@
 | -------   | -----   |
 | [![歌单详情](https://z3.ax1x.com/2021/07/28/WT0ezQ.md.png)](https://imgtu.com/i/WT0ezQ)        | [![专辑详情](https://z3.ax1x.com/2021/07/28/WTwzxH.md.png)](https://imgtu.com/i/WTwzxH)      |
 
-## 📄历史版本
+## 📆历史版本
 #### V1.0.0 (2021年7月28日)
 - 正式版发布
 
@@ -118,3 +118,5 @@
 
 **正常使用请选择[网易云音乐官方客户端](https://music.163.com/)**
 
+## 📝License
+[MIT](LICENSE)
