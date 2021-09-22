@@ -69,7 +69,7 @@
 </template>
 
 <script >
-import axios from 'axios'
+import { mvListAPI } from '@/utils/api'
 
 export default {
   data(){
@@ -111,17 +111,14 @@ export default {
     },
     getMvList(changeTotal=false){
       this.loading = true
-      axios({
-        url:this.URL+"/mv/all",
-        method:'get',
-        params:{
+      let params = {
           area:this.region,
           type:this.type,
           order:this.order,
           limit:this.pageSize,
           offset:(this.page-1)*this.pageSize
-        }
-      }).then(res=>{
+      }
+      mvListAPI(params).then(res=>{
         console.log(res)
         if(!changeTotal)
           this.total  = res.data.count
@@ -131,10 +128,9 @@ export default {
             this.mvList[i].playCount = parseInt(this.mvList[i].playCount/10000)+'万'
         }
 
-      })
-      setTimeout(() => {
+      }).then(()=>{
         this.loading = false
-      }, 500);
+      })
     }
   },
   created(){

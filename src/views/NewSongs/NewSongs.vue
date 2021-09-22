@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { getNewSongsAPI,playMusicAPI } from '@/utils/api'
 
 export default {
   data(){
@@ -52,40 +52,7 @@ export default {
     }
   },
   created(){
-    axios({
-      url:this.URL+'/top/song',
-      method:'get',
-      params:{
-        type:0,
-      }
-    }).then(res=>{
-      // console.log(res)
-      let resultList = res.data.data.slice(0,50)
-      let songsList = []
-      for (const item of resultList) {
-          let duration = item.duration
-          let min = parseInt(duration / 60000).toString().padStart(2,'0')
-          let second = parseInt((duration-min*60000)/1000).toString().padStart(2,'0')
-          duration = `${min}:${second}`
-          let song = {
-              id:item.id,
-              songName:item.name,
-              // singer:item.artists[0].name,
-              // artistId:item.artists[0].id,
-              artistInfo:item.artists,
-              album:item.album.name,
-              albumId:item.album.id,
-              imgUrl:item.album.picUrl,
-              duration,
-              mp3Url:item.mp3Url
-          }
-          songsList.push(song)
-      }
-      this.tableData = songsList    
-    })
-    setTimeout(() => {
-      this.loading = false
-    }, 500);
+    this.onLoad()
   },
   computed:{
     musicQueue(){
@@ -93,6 +60,38 @@ export default {
     }
   },
   methods: {
+    onLoad(){
+      let params = {
+        type :0
+      }
+      getNewSongsAPI(params).then(res=>{
+        // console.log(res)
+        let resultList = res.data.data.slice(0,50)
+        let songsList = []
+        for (const item of resultList) {
+            let duration = item.duration
+            let min = parseInt(duration / 60000).toString().padStart(2,'0')
+            let second = parseInt((duration-min*60000)/1000).toString().padStart(2,'0')
+            duration = `${min}:${second}`
+            let song = {
+                id:item.id,
+                songName:item.name,
+                // singer:item.artists[0].name,
+                // artistId:item.artists[0].id,
+                artistInfo:item.artists,
+                album:item.album.name,
+                albumId:item.album.id,
+                imgUrl:item.album.picUrl,
+                duration,
+                mp3Url:item.mp3Url
+            }
+            songsList.push(song)
+        }
+        this.tableData = songsList    
+      }).then(()=>{
+        this.loading = false
+      })
+    },
     toArtist(id){
         this.$router.push(`/artist?artistId=${id}`)
     },
@@ -102,13 +101,8 @@ export default {
     play(row){
       console.log(row)
       let id = row.id
-      axios({
-        url:this.URL+"/song/url",
-        method: "get",
-        params:{
-          id
-        }
-      }).then(res=>{
+
+      playMusicAPI({id}).then(res=>{
         if(res.data.data[0].url){
           // console.log(res)
           this.songUrl = res.data.data[0].url
@@ -149,9 +143,6 @@ export default {
         }
       })
     },
-    // play(row) {
-    //   this.$parent.$parent.musicUrl = row.mp3Url
-    // }
   }
 }
 </script>
@@ -168,7 +159,7 @@ export default {
   }
 
   .new-songs >>> .el-loading-spinner {
-      top: 10%;
+      top: 50%;
   }
 
   .el-table td, .el-table th.is-leaf {

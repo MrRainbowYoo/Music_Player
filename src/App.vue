@@ -1,7 +1,12 @@
 <template>
   <div id="app">
     <Top></Top>
-    <Index></Index>
+    <Index>
+      <keep-alive>
+        <router-view v-if="this.$route.meta.keepAlive"></router-view>
+      </keep-alive>
+      <router-view v-if="!this.$route.meta.keepAlive"></router-view>
+    </Index>
     <SongDetail :show="show"></SongDetail>
     <transition name="fade">
       <Queue v-show="showQueue"></Queue>

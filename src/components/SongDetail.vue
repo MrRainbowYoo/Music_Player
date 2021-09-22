@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 import ColorThief from 'colorthief'
+import { lyricAPI } from '@/utils/api'
 
 export default {
     data(){
@@ -65,13 +65,7 @@ export default {
             })
         },
         getLyric(id){
-            axios({
-                url:this.URL+'/lyric',
-                method:'get',
-                params:{
-                    id
-                }
-            }).then(res=>{
+            lyricAPI({id}).then(res=>{
                 console.log(res)
 
                 let _this = this

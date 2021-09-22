@@ -144,9 +144,9 @@
 </template>
 
 <script>
-import axios from 'axios'
 import {formatDate,formatDateFully} from '../../utils/utils'
 import elTableInfiniteScroll from 'el-table-infinite-scroll'
+import { playlistDetailAPI,songInfoAPI,playMusicAPI,commentsAPI } from '@/utils/api'
 // import func from 'vue-editor-bridge'
 
 export default {
@@ -284,13 +284,7 @@ export default {
             }, 500);
         },                
         getTableData(){
-            axios({
-                url:this.URL+'/playlist/detail',
-                method:'get',
-                params:{
-                    id:this.playlistId
-                }
-            }).then(res=>{
+            playlistDetailAPI({id:this.playlistId}).then(res=>{
                 // console.log(res)
                 this.playlistInfo = res.data.playlist
                 this.playlistUserAvatar = res.data.playlist.creator.avatarUrl
@@ -313,19 +307,12 @@ export default {
                     console.log('1111')
                 })
 
-                setTimeout(()=>{
-                    this.loading = false
-                },500)
+            }).then(()=>{
+                this.loading = false
             })
         },                
         getTracks(trackId,all=false){
-            axios({
-                url:this.URL+"/song/detail",
-                method:'get',
-                params:{
-                    ids:trackId
-                }
-            }).then(res=>{
+            songInfoAPI({ids:trackId}).then(res=>{
                 console.log(res)
                 let pushList = []
                 for(let item of res.data.songs){
@@ -352,13 +339,7 @@ export default {
         play(row){
             console.log(row)
             let id = row.id
-            axios({
-                url:this.URL+"/song/url",
-                method: "get",
-                params:{
-                id
-                }
-            }).then(res=>{
+            playMusicAPI({id}).then(res=>{
                 if(res.data.data[0].url){
                 this.songUrl = res.data.data[0].url
                 
@@ -393,15 +374,12 @@ export default {
         },        
         getComments(isFirst=false){
             this.loading = true
-            axios({
-                url:this.URL+'/comment/playlist',
-                method:'get',
-                params:{
-                    id:this.playlistId,
-                    limit:this.pageSize,
-                    offset:(this.page-1)*this.pageSize
-                }
-            }).then(res=>{
+            let params = {
+                id:this.playlistId,
+                limit:this.pageSize,
+                offset:(this.page-1)*this.pageSize                
+            }
+            commentsAPI(params,'playlist').then(res=>{
                 console.log(res)
 
                 for(let item of res.data.comments){
@@ -574,6 +552,25 @@ export default {
   .songs-table {
     width: 100%;
   }
+
+    /* 设置滚动条样式 */
+    /* 滚动条整体样式 */
+    .songs-table>>>::-webkit-scrollbar{
+        width: 5px;
+        height: 1px;
+    }
+    /* 滚动条里面的小方块 */
+    .songs-table>>>::-webkit-scrollbar-thumb{
+        border-radius: 4px;
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+        background: #f2f2f2;
+    }
+    /* 滚动条里面的轨道 选择不显示 */
+    .songs-table>>>::-webkit-scrollbar-track{
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+        background: #fff;
+    }
 
   .img-wrap {
     width: 60px;

@@ -27,7 +27,6 @@
 </template>
 
 <script scoped>
-// import func from 'vue-editor-bridge'
 import AudioChen from './AudioChen.vue'
 export default {
     data(){

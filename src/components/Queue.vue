@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { playMusicAPI } from '@/utils/api'
 
 export default {
     data(){
@@ -132,13 +132,7 @@ export default {
       },
       play(item){
           console.log(item)
-            axios({
-                url:this.URL+"/song/url",
-                method: "get",
-                params:{
-                id:item.id
-                }
-            }).then(res=>{
+          playMusicAPI({id:item.id}).then(res=>{
                 if(res.data.data[0].url){
                 let songUrl = res.data.data[0].url
                 let musicInfo = {

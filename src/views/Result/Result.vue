@@ -95,8 +95,7 @@
 </template>
 
 <script scoped>
-
-import axios from 'axios'
+import { playMusicAPI,searchAPI } from '@/utils/api'
 
 export default {
     data(){
@@ -204,23 +203,10 @@ export default {
         play(row){
             console.log(row)
             let id = row.id
-            axios({
-                url:this.URL+"/song/url",
-                method: "get",
-                params:{
-                    id
-                }
-            }).then(res=>{
+            playMusicAPI({id}).then(res=>{
                 if(res.data.data[0].url){
                 // console.log(res)
                 this.songUrl = res.data.data[0].url
-                // this.$parent.$parent.musicUrl = this.songUrl
-                // // 传入歌曲信息
-                // this.$parent.$parent.musicInfo = {
-                //     imgUrl:row.imgUrl,
-                //     singer:row.singer,
-                //     songName:row.songName
-                // }
 
                 let musicInfo = {
                     imgUrl:row.imgUrl,
@@ -254,16 +240,13 @@ export default {
         },
         getTableData(type=1){
             this.loading = true
-            axios({
-                url:this.URL+"/cloudsearch",
-                method:"get",
-                params:{
-                    keywords:this.keywords,
-                    limit:this.pageSize,
-                    offset:(this.page-1)*this.pageSize,
-                    type //1歌曲 1000歌单 1004MV
-                }
-            }).then(res=>{
+            let params = {
+                keywords:this.keywords,
+                limit:this.pageSize,
+                offset:(this.page-1)*this.pageSize,
+                type //1歌曲 1000歌单 1004MV                
+            }
+            searchAPI(params).then(res=>{
                 console.log(res)
                 let resultList = []
 
@@ -324,12 +307,9 @@ export default {
                      
                         break         
                 }
-
+            }).then(()=>{
+                this.loading = false
             })  
-            
-            setTimeout(() => {
-                this.loading = false        
-            }, 500);
         },
         beginAnimation(x,y){
             this.showAddBall = true

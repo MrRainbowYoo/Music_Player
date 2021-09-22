@@ -67,7 +67,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { artistsAPI } from '@/utils/api'
+
 export default {
     data(){
         return {
@@ -100,15 +101,12 @@ export default {
             }, 1000);
         },
         getAlbumData(){
-            axios({
-                url:this.URL+'/artist/album',
-                method:'get',
-                params:{
-                    id:this.artistId,
-                    limit:50,
-                    offset:0
-                }
-            }).then(res=>{
+            let params = {
+                id:this.artistId,
+                limit:50,
+                offset:0                
+            }
+            artistsAPI(params,'album').then(res=>{
                 console.log(res)
                 this.topInfo = {
                     albumSize:res.data.artist.albumSize,
@@ -116,37 +114,25 @@ export default {
                     name:res.data.artist.name,
                     picUrl:res.data.artist.picUrl
                 }
-                this.albumData = res.data.hotAlbums
-
-            setTimeout(() => {
+                this.albumData = res.data.hotAlbums             
+            }).then(()=>{
                 this.loading = false
-            }, 0);                
             })
         },
         getMVData(){
-            axios({
-                url:this.URL+'/artist/mv',
-                method:'get',
-                params:{
-                    id:this.artistId,
-                    limit:50,
-                    offset:0
-                }
-            }).then(res=>{
+            let params = {
+                id:this.artistId,
+                limit:50,
+                offset:0               
+            }
+            artistsAPI(params,'mv').then(res=>{
                 // console.log(res)
                 this.mvData = res.data.mvs
             })
         },
         getArtistInfo(){
-            axios({
-                url:this.URL+'/artist/desc',
-                method:'get',
-                params:{
-                    id:this.artistId,
-                }
-            }).then(res=>{
+            artistsAPI({id:this.artistId},'desc').then(res=>{
                 // console.log(res)
-
                 let l = res.data.briefDesc.split(/[\n]/)
                 this.briefDescList = l
 
@@ -159,13 +145,7 @@ export default {
             })                            
         },
         getSimi(){
-            axios({
-                url:this.URL+'/simi/artist',
-                method:'get',
-                params:{
-                    id:this.artistId
-                }
-            }).then(res=>{
+            artistsAPI({id:this.artistId},'simi').then(res=>{
                 console.log(res)
                 this.simi = res.data.artists
             })

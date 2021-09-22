@@ -27,19 +27,25 @@ const routes = [
   },
   {
     path:"/discover",
-    component:Discover
+    component:Discover,
   },
   {
     path:"/recommend",
-    component:Recommend
+    component:Recommend,
+    meta: {
+      keepAlive:true,
+    }
   },
   {
     path:"/newsongs",
-    component:NewSongs
+    component:NewSongs,
   },
   {
     path:"/mvs",
-    component:MVs
+    component:MVs,
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path:'/result',
@@ -47,7 +53,7 @@ const routes = [
   },
   {
     path:'/playlist',
-    component:Playlist
+    component:Playlist,
   },
   {
     path:'/mvdetail',
@@ -65,6 +71,15 @@ const routes = [
 
 const router = new VueRouter({
   routes
+})
+
+router.beforeEach((to,from,next)=>{
+  let needKeepAlive = ['/recommend','/mvs']
+  if(needKeepAlive.includes(to.path) && (from.path==="/mvdetail" || from.path === '/playlist'))
+    to.meta.keepAlive = true
+  else
+    to.meta.keepAlive = false
+  next()
 })
 
 export default router

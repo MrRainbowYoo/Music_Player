@@ -7,7 +7,7 @@
         </div>
         <div class="input-box">
             <el-input
-            placeholder="请输入内容"
+            placeholder="搜索"
             v-model="searchValue"
             prefix-icon="el-icon-search"
             clearable
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { hotSearchAPI } from '@/utils/api'
 
 export default {
     data(){
@@ -92,10 +92,7 @@ export default {
         getSearchHot(){
             this.showHot=true
             if(this.hotData.length == 0)
-                axios({
-                    url:this.URL+'/search/hot/detail',
-                    method:'get'
-                }).then(res=>{
+            hotSearchAPI().then(res=>{
                     console.log(res)
                     this.hotData = res.data.data
                 })

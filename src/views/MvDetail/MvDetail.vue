@@ -97,8 +97,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 import {formatDateFully} from '@/utils/utils.js'
+import { commentsAPI,playMVAPI,simiMVAPI,mvDetailAPI,artistsAPI } from '@/utils/api'
 
 export default {
     data(){
@@ -133,15 +133,12 @@ export default {
         },
         getComments(){
             this.loadingComments = true
-            axios({
-                url:this.URL+"/comment/mv",
-                method:'get',
-                params:{
-                    id:this.$route.query.id,
-                    limit:this.pageSize,
-                    offset:(this.page-1)*this.pageSize
-                }
-            }).then(res=>{
+            let params = {
+                id:this.$route.query.id,
+                limit:this.pageSize,
+                offset:(this.page-1)*this.pageSize
+            }
+            commentsAPI(params,'mv').then(res=>{
                 // console.log(res)
                 if(Object.prototype.hasOwnProperty.call(res.data,'hotComments')){
                     this.hotComments = res.data.hotComments
@@ -156,33 +153,20 @@ export default {
                 }               
 
                 this.total = this.mvInfo.commentCount - this.hotComments.length
-            })
-            setTimeout(() => {
+            }).then(()=>{
                 this.loadingComments = false
-            }, 500);  
+            })
         },
         searchMV(id){
             this.loading = true
             // 获取mv播放url
-            axios({
-                url:this.URL+"/mv/url",
-                method:'get',
-                params:{
-                    id
-                }
-            }).then(res=>{
+            playMVAPI({id}).then(res=>{
                 // console.log(res)
                 this.mvUrl = res.data.data.url
             })
 
             // 获取相关mv推荐
-            axios({
-                url:this.URL+"/simi/mv",
-                method:'get',
-                params:{
-                    mvid:id
-                }
-            }).then(res=>{
+            simiMVAPI({mvid:id}).then(res=>{
                 // console.log(res)
                 this.recommendMvs = res.data.mvs
 
@@ -197,35 +181,22 @@ export default {
             })        
 
             // 获取MV信息
-            axios({
-                url:this.URL+"/mv/detail",
-                method:'get',
-                params:{
-                    mvid:id
-                }
-            }).then(res=>{
+            mvDetailAPI({mvid:id}).then(res=>{
                 console.log(res)
                 this.mvInfo = res.data.data
                 if(this.mvInfo.playCount >= 100000)
                     this.mvInfo.playCount = parseInt(this.mvInfo.playCount/10000)+'万'
-                axios({
-                    url:this.URL+"/artists",
-                    method:'get',
-                    params:{
-                        id:this.mvInfo.artistId
-                    }
-                }).then(res=>{
+
+                artistsAPI({id:this.mvInfo.artistId}).then(res=>{
                     // console.log(res)
                     this.avatarUrl = res.data.artist.img1v1Url
                 })
                 
                 // 获取评论信息
                 this.getComments()      
-            })
-
-            setTimeout(() => {
+            }).then(()=>{
                 this.loading = false
-            }, 500);
+            })
         }           
     },
     created(){
@@ -234,7 +205,6 @@ export default {
         this.mvId = mvId
     
         this.searchMV(mvId)
-
     }
 }
 </script>

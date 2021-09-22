@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { highQualityAPI,songListAPI } from '@/utils/api'
 
 export default {
   data(){
@@ -74,14 +74,11 @@ export default {
     },
     getHighQuality(cat='全部'){
         // 精品歌单
-        axios({
-          url:this.URL+'/top/playlist/highquality',
-          method:'get',
-          params:{
-            limit:1,
-            cat
-          }
-        }).then(res=>{
+        let params = {
+          limit : 1,
+          cat
+        }
+        highQualityAPI(params).then(res=>{
           // console.log(res)
           this.highQuality = res.data.playlists[0]
         })
@@ -89,15 +86,12 @@ export default {
     getSongLists(cat="全部"){
       this.loading = true
       // 歌单列表
-      axios({
-        url:this.URL+'/top/playlist',
-        method:'get',
-        params:{
-          limit:10,
-          offset:(this.page-1)*10,
-          cat
-        }
-      }).then(res=>{
+      let params = {
+        limit:10,
+        offset:(this.page-1)*10,
+        cat
+      }
+      songListAPI(params).then(res=>{
         // console.log(res)
         this.songLists = res.data.playlists
         this.total = res.data.total /* 改变总页数 */
@@ -105,11 +99,9 @@ export default {
           if(this.songLists[i].playCount >= 100000)
             this.songLists[i].playCount = parseInt(this.songLists[i].playCount/10000)+'万'
         }     
-      })
-
-      setTimeout(() => {
+      }).then(()=>{
         this.loading = false
-      }, 500);
+      })
     },
     handleCurrentChange(page){
       // console.log(page)

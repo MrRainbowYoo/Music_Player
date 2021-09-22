@@ -18,7 +18,8 @@
       </div>
       <main>
           <el-scrollbar style="height:100%">
-            <router-view></router-view>
+            <!-- <router-view></router-view> -->
+            <slot></slot>
           </el-scrollbar>
       </main>
   </div>
@@ -42,8 +43,9 @@ export default {
     .index-left {
         width: 200px;
         min-width: 200px;
-        background-color: #ededed;
+        /* background-color: #ededed; */
         text-align: center;
+        border-right: 1px solid #ededed;
     }
 
     .index-left ul {
@@ -59,7 +61,7 @@ export default {
     }
 
     .index-left li:hover {
-        background-color: #ddd;
+        background-color: #ededed;
     }
 
     .index-left a {
