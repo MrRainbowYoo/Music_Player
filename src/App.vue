@@ -12,6 +12,9 @@
       <Queue v-show="showQueue"></Queue>
     </transition>
     <Bottom></Bottom>
+    <div style="fontSize:12px; position: absolute; bottom: 10%;left:10px;">
+      备案号：<a href="https://beian.miit.gov.cn" target="_blank">浙ICP备19010344号-1</a>
+    </div>
   </div>
 </template>
 
