@@ -1,14 +1,16 @@
 <template>
   <div class="audio-wrap">
-    <audio :src="musicUrl"
-     controls 
-     autoplay 
-     ref="audio" 
-     style="display:none" 
-     @canplay="getDuration" 
-     @timeupdate="updateTime"
-     @ended="onEnded" 
-     您的浏览器不支持audio标签></audio>
+    <audio
+        :src="musicUrl"
+        controls 
+        autoplay 
+        ref="audio" 
+        style="display:none" 
+        @canplay="getDuration" 
+        @timeupdate="updateTime"
+        @ended="onEnded" 
+        您的浏览器不支持audio标签
+    ></audio>
     <div class="audio-left">
         <div class="audio-btns">
         <span class="iconfont icon-shangyishou" title="上一首" @click="prev"></span>
@@ -20,7 +22,14 @@
         <div class="audio-progress">
             <span>{{currentTime | timeFormat}}</span>
             <div class="block">
-                <el-slider v-model="currentTime"  :max="duration" :show-tooltip="false" @change="changeCurrentTime" @mousedown.native="isDrag = true" @mouseup.native="isDrag = false"></el-slider>
+                <el-slider 
+                    v-model="currentTime"
+                    :max="duration"
+                    :show-tooltip="false"
+                    @change="changeCurrentTime"
+                    @mousedown.native="isDrag = true"
+                    @mouseup.native="isDrag = false"
+                ></el-slider>
             </div>
             <span>{{duration | timeFormat}}</span>
         </div>
@@ -30,9 +39,17 @@
         <div class="slot"></div>
         <div class="audio-voice">
             <span class="iconfont icon-yinliang" v-if="voice" @click="voice=0"></span>
-            <span class="iconfont icon-jingyin" v-if="!voice" @click="voice=(cacheVoice==0?0.7:cacheVoice)"></span>
+            <span class="iconfont icon-jingyin" v-if="!voice" @click="voice=(cacheVoice == 0 ? 0.7 : cacheVoice)"></span>
             <div class="block">
-                <el-slider v-model="voice" :max=1 :step=0.1 :show-tooltip="true" @input="changeVolume" @change="changeCacheVolume" :format-tooltip="formatTooltip"></el-slider>
+                <el-slider
+                    v-model="voice"
+                    :max=1
+                    :step=0.1
+                    :show-tooltip="true"
+                    @input="changeVolume"
+                    @change="changeCacheVolume"
+                    :format-tooltip="formatTooltip"
+                ></el-slider>
             </div>
         </div>
     </div>

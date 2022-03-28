@@ -7,13 +7,13 @@
         </div>
         <div class="input-box">
             <el-input
-            placeholder="搜索"
-            v-model="searchValue"
-            prefix-icon="el-icon-search"
-            clearable
-            @keyup.enter.native="search"
-            @focus="getSearchHot"
-            @blur="showHot = false"
+                placeholder="搜索"
+                v-model="searchValue"
+                prefix-icon="el-icon-search"
+                clearable
+                @keyup.enter.native="search"
+                @focus="getSearchHot"
+                @blur="showHot = false"
             >
             </el-input>
         </div>
@@ -66,18 +66,18 @@ export default {
         search(){
             // alert(this.searchValue)
             if(this.isNull(this.searchValue))
-                this.open4()
+                this.showError()
             else{
                 this.$router.push({path:`/result?keywords=${this.searchValue}`})
                 if(!this.history.includes(this.searchValue))
                     this.history.push(this.searchValue)
             }
         },
-        open4() {
+        showError() {
             this.$message({
-            showClose: true,
-            message: '请输入内容',
-            type: 'error'
+                showClose: true,
+                message: '请输入内容',
+                type: 'error'
             });
         },
         isNull( str ){
@@ -91,11 +91,12 @@ export default {
         },
         getSearchHot(){
             this.showHot=true
-            if(this.hotData.length == 0)
-            hotSearchAPI().then(res=>{
+            if(this.hotData.length == 0) {
+                hotSearchAPI().then(res=>{
                     console.log(res)
                     this.hotData = res.data.data
                 })
+            }
         },
         toHot(value){
             this.searchValue = value
@@ -111,6 +112,7 @@ export default {
                     if(i == index)
                         this.history.splice(i,1)
                 }
+            // 防止点击x删除的时候，导致热搜榜消失，也可以通过.prevent修饰符
             event.preventDefault();
         },
         prevent(){
@@ -191,6 +193,7 @@ export default {
         display: flex;
         align-items: center;
         padding: 5px;
+        cursor: default;
     }
 
     .hot-item:hover {

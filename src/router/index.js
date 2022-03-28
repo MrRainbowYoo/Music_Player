@@ -2,15 +2,15 @@ import Vue from 'vue'
 import VueRouter from "vue-router"
 
 
-import Discover from "@/views/Discover/Discover.vue"
-import Recommend from '@/views/Recommend/Recommend.vue'
-import NewSongs from '@/views/NewSongs/NewSongs.vue'
-import MVs from '@/views/MVs/MVs.vue'
-import Result from '@/views/Result/Result.vue'
-import Playlist from '@/views/Playlist/Playlist.vue'
-import MvDetail from '@/views/MvDetail/MvDetail.vue'
-import Artist from '@/views/Artist/Artist.vue'
-import Album from '@/views/Album/Album.vue'
+// import Discover from "@/views/Discover/Discover.vue"
+// import Recommend from '@/views/Recommend/Recommend.vue'
+// import NewSongs from '@/views/NewSongs/NewSongs.vue'
+// import MVs from '@/views/MVs/MVs.vue'
+// import Result from '@/views/Result/Result.vue'
+// import Playlist from '@/views/Playlist/Playlist.vue'
+// import MvDetail from '@/views/MvDetail/MvDetail.vue'
+// import Artist from '@/views/Artist/Artist.vue'
+// import Album from '@/views/Album/Album.vue'
 
 Vue.use(VueRouter)
 
@@ -27,50 +27,51 @@ const routes = [
   },
   {
     path:"/discover",
-    component:Discover,
+    component: () => import('@/views/Discover/Discover.vue'),
   },
   {
     path:"/recommend",
-    component:Recommend,
+    component: () => import('@/views/Recommend/Recommend.vue'),
     meta: {
       keepAlive:true,
     }
   },
   {
     path:"/newsongs",
-    component:NewSongs,
+    component: () => import('@/views/NewSongs/NewSongs.vue'),
   },
   {
     path:"/mvs",
-    component:MVs,
+    component: () => import('@/views/MVs/MVs.vue'),
     meta: {
       keepAlive: true
     }
   },
   {
     path:'/result',
-    component:Result
+    component: () => import('@/views/Result/Result.vue')
   },
   {
     path:'/playlist',
-    component:Playlist,
+    component: () => import('@/views/Playlist/Playlist.vue'),
   },
   {
     path:'/mvdetail',
-    component:MvDetail
+    component: () => import('@/views/MvDetail/MvDetail.vue')
   },
   {
     path:'/artist',
-    component:Artist
+    component: () => import('@/views/Artist/Artist.vue')
   },
   {
     path:'/album',
-    component:Album
+    component: () => import('@/views/Album/Album.vue')
   }
 ]
 
 const router = new VueRouter({
-  routes
+  routes,
+  mode: 'history'
 })
 
 router.beforeEach((to,from,next)=>{

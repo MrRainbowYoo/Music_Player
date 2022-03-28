@@ -1,27 +1,35 @@
 <template>
   <div class="bottom">
-      <div class="music-box">
-        <div class="img-wrap el-icon-arrow-up" @click="toSongDetail()" title="打开音乐详情页" onselectstart="return false">
-            <img :src="globalMusicInfo.imgUrl ? globalMusicInfo.imgUrl : defaultImg" alt="">
+    <div class="music-box">
+    <!-- onselectstart="return false" 为的是避免多次点击左下角歌曲封面的时候出现蓝色选中效果 -->
+    <div class="img-wrap el-icon-arrow-up" @click="toSongDetail()" title="打开音乐详情页" onselectstart="return false"> 
+        <img :src="globalMusicInfo.imgUrl ? globalMusicInfo.imgUrl : defaultImg" alt="">
+    </div>
+    <div class="music-info" v-show="globalMusicInfo.songName">
+        <span class="music-name" :title="globalMusicInfo.songName">{{globalMusicInfo.songName}}</span>
+        
+        <div class="music-singer">
+            <span v-for="(singer,i) in globalMusicInfo.artistInfo" :key="i+99">{{singer.name}} </span>
         </div>
-        <div class="music-info" v-show="globalMusicInfo.songName">
-            <span class="music-name" :title="globalMusicInfo.songName">{{globalMusicInfo.songName}}</span>
-            
-            <div class="music-singer">
-                <span v-for="(singer,i) in globalMusicInfo.artistInfo" :key="i+99">{{singer.name}} </span>
-            </div>
-        </div>
-        <span class="music-name" v-show="!globalMusicInfo.songName" style="line-height:50px">还没有播放音乐哦</span>
-      </div>
-      <AudioChen :musicUrl="globalMusicUrl" @timeupdate="updateTime" @play="playStatus" @pause="pauseStatus" @next="next" @prev="prev" @end="next"></AudioChen>
-      <!-- <audio :src="globalMusicUrl" autoplay controls ref="audio" @timeupdate="updateTime" @pause="pauseStatus" @play="playStatus"></audio> -->
+    </div>
+    <span class="music-name" v-show="!globalMusicInfo.songName" style="line-height:50px">还没有播放音乐哦</span>
+    </div>
+    <AudioChen :musicUrl="globalMusicUrl" @timeupdate="updateTime" @play="playStatus" @pause="pauseStatus" @next="next" @prev="prev" @end="next"></AudioChen>
+    <!-- <audio :src="globalMusicUrl" autoplay controls ref="audio" @timeupdate="updateTime" @pause="pauseStatus" @play="playStatus"></audio> -->
 
-    <el-tooltip content="播放队列" placement="top" effect="light">
-        <div @click="showQueue($event)" ref="queue" :class="{'delete-queue-style bofangliebiao':this.queueStyle=='delete','add-queue-style bofangliebiao':this.queueStyle=='add','bofangliebiao':this.queueStyle=='normal'}">
-          <span class="iconfont icon-yinleliebiao"></span>
-          <span>{{musicQueue.length}}</span>
-      </div>
-    </el-tooltip>
+    <!-- el-tooltip会在#app外生成一个dom -->
+    <!-- <el-tooltip content="播放队列" placement="top" effect="light"> -->
+    <div @click="showQueue($event)" 
+        ref="queue"
+        title="播放队列"
+        :class="{'delete-queue-style bofangliebiao'
+        :this.queueStyle=='delete','add-queue-style bofangliebiao'
+        :this.queueStyle=='add','bofangliebiao'
+        :this.queueStyle=='normal'}">
+            <span class="iconfont icon-yinleliebiao"></span>
+            <span>{{musicQueue.length}}</span>
+    </div>
+    <!-- </el-tooltip> -->
 
   </div>
 </template>
@@ -62,30 +70,21 @@ export default {
         }
     },
     mounted(){
-        const that = this
-                if(that.$refs.queue.getBoundingClientRect){
-                    // console.log(that.$refs.queue.getBoundingClientRect())
-                    let pos = {
-                        top:Math.floor(that.$refs.queue.getBoundingClientRect().top),
-                        left:Math.floor(that.$refs.queue.getBoundingClientRect().left)
-                    }
-                    that.$store.commit("changeQueuePos",pos)
-                }        
-        window.onresize = () => {
-            return (() => {
-                if(that.$refs.queue.getBoundingClientRect){
-                    // console.log(that.$refs.queue.getBoundingClientRect())
-                    let pos = {
-                        top:Math.floor(that.$refs.queue.getBoundingClientRect().top),
-                        left:Math.floor(that.$refs.queue.getBoundingClientRect().left)
-                    }
-                    that.$store.commit("changeQueuePos",pos)
-                }
-            })()
-        }        
+        this.changeQueuePostion()
 
+        window.onresize = () => this.changeQueuePostion()
     },
     methods:{
+        changeQueuePostion() {
+            if(this.$refs.queue.getBoundingClientRect){
+                // console.log(that.$refs.queue.getBoundingClientRect())
+                let pos = {
+                    top:Math.floor(this.$refs.queue.getBoundingClientRect().top),
+                    left:Math.floor(this.$refs.queue.getBoundingClientRect().left)
+                }
+                this.$store.commit("changeQueuePos",pos)
+            }
+        },
         toSongDetail(){
             if(this.globalMusicUrl)
                 this.$parent.show = !this.$parent.show

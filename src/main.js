@@ -12,7 +12,7 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 
 Vue.use(Vuelazyload,{
-  preLoad:1,
+  preLoad:1.3,
   loading: require('./assets/imgs/loading.png'),
   attempt:2
 })

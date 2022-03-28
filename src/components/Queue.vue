@@ -9,22 +9,22 @@
                 </div>
                 <ul class="queue-wrap">
                     <el-scrollbar style="height:100%">
-                    <li class="queue-song" v-for="item in musicQueue" :key="item.id" @dblclick="play(item)" :class="{'active-song':item.id==globalMusicInfo.id}">
-                        <div class="playingIcon" v-show="item.id==globalMusicInfo.id && !isMusicPaused">
-                            <div class="playingIcon1"></div>
-                            <div class="playingIcon2"></div>
-                            <div class="playingIcon3"></div>
-                        </div>
-                        <span :class="{'playingIcon iconfont icon-zanting':isMusicPaused && item.id==globalMusicInfo.id}"></span>
-                        <span class="queue-song-name">{{item.songName}}</span>
+                        <li class="queue-song" v-for="item in musicQueue" :key="item.id" @dblclick="play(item)" :class="{'active-song':item.id==globalMusicInfo.id}">
+                            <div class="playingIcon" v-show="item.id==globalMusicInfo.id && !isMusicPaused">
+                                <div class="playingIcon1"></div>
+                                <div class="playingIcon2"></div>
+                                <div class="playingIcon3"></div>
+                            </div>
+                            <span :class="{'playingIcon iconfont icon-zanting':isMusicPaused && item.id==globalMusicInfo.id}"></span>
+                            <span class="queue-song-name">{{item.songName}}</span>
 
-                        <div class="queue-song-singer">
-                            <span v-for="(singer,i) in item.artistInfo" :key="i" @click.stop="toArtist(singer.id)">{{singer.name}} </span>
-                        </div>
+                            <div class="queue-song-singer">
+                                <span v-for="(singer,i) in item.artistInfo" :key="i" @click.stop="toArtist(singer.id)">{{singer.name}} </span>
+                            </div>
 
-                        <span class="queue-song-duration">{{item.duration}}</span>
-                        <span class="queue-song-delete" @click="deleteQueue(item.id)">×</span>
-                    </li>
+                            <span class="queue-song-duration">{{item.duration}}</span>
+                            <span class="queue-song-delete" @click="deleteQueue(item.id)">×</span>
+                        </li>
                     </el-scrollbar>
                 </ul>
             </el-tab-pane>
@@ -45,94 +45,90 @@ export default {
         }
     },
     methods:{
-      handleClick(tab, event) {
+        handleClick(tab, event) {
             console.log(tab, event);
-      },
+        },
         toArtist(id){
             this.$router.push(`/artist?artistId=${id}`)
         },         
-      deleteQueue(id){
-        //   console.log(id)
-        this.$confirm('确定删除该歌曲吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-
-            
-            let ids = []
-            for (const item of this.musicQueue) {
-                ids.push(item.id)
-            }
-            let ii = ids.indexOf(id)
-
-
-            setTimeout(() => {
-                this.$store.commit('changeQueueStyle','delete') 
-                this.$store.commit('deleteMusic',id)
-                if(ii < this.nowIndex){
-                    this.$store.commit('changeNowIndex',this.nowIndex-1)          
-                }else if(ii== this.nowIndex){
-                    this.$store.commit('deleteToNext')
-                }     
-            }, 300);
-
-
-            setTimeout(() => {
-                this.$store.commit('changeQueueStyle','normal')                   
-            }, 1000);
-
-            // this.$message({
-            //     type: 'success',
-            //     message: '删除成功!'
-            // });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
-        });
-      },
-      clearMusicQueue(){
-        if(this.musicQueue.length == 0)
-            this.$message({
-                message:'已经是空的了~',
-                type:'warning',
-                showClose:true
-            })
-        else{
-            this.$confirm('确定清空列表吗?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
+        deleteQueue(id){
+            //   console.log(id)
+            this.$confirm('确定删除该歌曲吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
             }).then(() => {
+                let ids = []
+                for (const item of this.musicQueue) {
+                    ids.push(item.id)
+                }
+                let ii = ids.indexOf(id)
 
-            this.$store.commit("changeMusicUrl","")
-            this.$store.commit("changeMusicInfo",{})
-            this.$store.commit("changeMusicStatus",true)
-            this.$store.commit("changeCurrentTime",0)
-            setTimeout(() => {
-             this.$store.commit('clearMusicQueue')               
-            }, 100);
+                setTimeout(() => {
+                    this.$store.commit('changeQueueStyle','delete') 
+                    this.$store.commit('deleteMusic',id)
+                    if(ii < this.nowIndex){
+                        this.$store.commit('changeNowIndex',this.nowIndex-1)          
+                    }else if(ii== this.nowIndex){
+                        this.$store.commit('deleteToNext')
+                    }     
+                }, 300);
 
-            // 强制刷新当前页面，初始化state
-            // this.$router.go(0)
 
-            this.$message({
-                type: 'success',
-                message: '已清空!'
-            });
+                setTimeout(() => {
+                    this.$store.commit('changeQueueStyle','normal')                   
+                }, 1000);
+
+                // this.$message({
+                //     type: 'success',
+                //     message: '删除成功!'
+                // });
             }).catch(() => {
-            this.$message({
+                this.$message({
                 type: 'info',
-                message: '已取消清空'
-            });          
-            });            
-        }
-      },
-      play(item){
-          console.log(item)
-          playMusicAPI({id:item.id}).then(res=>{
+                message: '已取消删除'
+                });          
+            });
+        },
+        clearMusicQueue(){
+            if(this.musicQueue.length == 0)
+                this.$message({
+                    message:'已经是空的了~',
+                    type:'warning',
+                    showClose:true
+                })
+            else{
+                this.$confirm('确定清空列表吗?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$store.commit("changeMusicUrl","")
+                    this.$store.commit("changeMusicInfo",{})
+                    this.$store.commit("changeMusicStatus",true)
+                    this.$store.commit("changeCurrentTime",0)
+                    setTimeout(() => {
+                        this.$store.commit('clearMusicQueue')               
+                    }, 100);
+
+                    // 强制刷新当前页面，初始化state
+                    // this.$router.go(0)
+
+                    this.$message({
+                        type: 'success',
+                        message: '已清空!'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消清空'
+                    });          
+                });            
+            }
+        },
+        play(item){
+            console.log(item)
+            playMusicAPI({id:item.id}).then(res=>{
                 if(res.data.data[0].url){
                 let songUrl = res.data.data[0].url
                 let musicInfo = {
@@ -155,9 +151,9 @@ export default {
 
                 }else{
                     this.$message({
-                    showClose: true,
-                    message: '对不起，歌曲暂时无法播放。',
-                    type: 'error'
+                        showClose: true,
+                        message: '对不起，歌曲暂时无法播放。',
+                        type: 'error'
                     });
                     // 若下一首没有版权，则自动跳到后一首歌;但是如果换做上一首没有版权，则无法跳到前一首，待解决这个bug
                     let nextIndex = (this.nowIndex + 1) % this.musicQueue.length
@@ -165,7 +161,7 @@ export default {
                 }
             })
 
-      }
+        }
     },
     computed:{
         musicQueue(){
