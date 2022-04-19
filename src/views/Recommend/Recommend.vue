@@ -32,23 +32,14 @@
             </div>
         </div>        
       </div>
-
-        <div class="page-wrap">
-            <el-pagination
-            @current-change="handleCurrentChange"
-            background
-            layout="prev, pager, next"
-            :total="total"
-            :page-size=10
-            :current-page="page">
-            </el-pagination>            
-        </div>      
+        <Pagination :total="total" :pageSize="pageSize" :nowPage="page" @changePage="handleCurrentChange"/>
     </div>
   </div>
 </template>
 
 <script>
 import { highQualityAPI,songListAPI } from '@/utils/api'
+import Pagination from '@/components/Pagination.vue'
 
 export default {
   data(){
@@ -59,8 +50,12 @@ export default {
       tabItems:['全部','欧美','华语','流行','说唱','摇滚','民谣','电子','轻音乐','影视原声','ACG','怀旧'],
       total:0,
       page:1,
+      pageSize: 10,
       loading:true
     }
+  },
+  components: {
+    Pagination
   },
   methods:{
     toPlaylistDetail(id){

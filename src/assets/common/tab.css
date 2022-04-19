@@ -1,0 +1,15 @@
+.songs-table .el-table__row:hover .plus{
+    display: block;
+}
+
+.el-tabs__active-bar {
+    background-color: rgb(236, 65, 65) !important;
+}
+
+.el-tabs__item.is-active {
+    color: rgb(236, 65, 65) !important;
+}
+
+.el-tabs__item:not(.is-active):hover {
+    color: rgba(236, 65, 65, 0.555) !important;
+}

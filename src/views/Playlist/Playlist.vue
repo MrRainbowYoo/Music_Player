@@ -31,7 +31,7 @@
         </div>
 
         <div class="playlist-tabs-wrap">
-            <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tabs v-model="activeName">
                 <el-tab-pane label="歌曲列表" name="first">
                     <div class="songs-table">
                         <el-table
@@ -54,7 +54,6 @@
                                     <p class="iconfont icon-play"  @click="play(scope.row)"></p>                                
                                 </div>                                
                                 </template>
-
                             </el-table-column>     
 
                             <el-table-column prop="name" label="音乐标题" width=""></el-table-column>
@@ -123,16 +122,7 @@
                                 </div>
                             </li>
                         </ul>
-                            <div class="page-wrap">
-                                <el-pagination
-                                @current-change="handleCurrentChange"
-                                background
-                                layout="prev, pager, next"
-                                :total="total"
-                                :page-size="pageSize"
-                                :current-page="page">
-                                </el-pagination>            
-                            </div>  
+                            <Pagination :total="total" :pageSize="pageSize" :nowPage="page" @changePage="handleCurrentChange"/>                              
                     </div>
 
 
@@ -147,7 +137,7 @@
 import {formatDate,formatDateFully} from '../../utils/utils'
 import elTableInfiniteScroll from 'el-table-infinite-scroll'
 import { playlistDetailAPI,songInfoAPI,playMusicAPI,commentsAPI } from '@/utils/api'
-// import func from 'vue-editor-bridge'
+import Pagination from '@/components/Pagination.vue'
 
 export default {
     data(){
@@ -169,6 +159,9 @@ export default {
             allData:[],
             showAddBall:false            
         }
+    },
+    components: {
+        Pagination
     },
     directives:{
         'el-table-infinite-scroll':elTableInfiniteScroll
@@ -199,9 +192,6 @@ export default {
         }        
     },
     methods:{
-        handleClick(tab) {
-            console.log(tab)
-        },
         toArtist(id){
             this.$router.push(`/artist?artistId=${id}`)
         },
@@ -427,6 +417,8 @@ export default {
 </script>
 
 <style scoped>
+    @import '../../assets/common/tab.css';
+
     .add-ball {
         position: fixed;
         color: rgb(236, 65, 65);
@@ -435,6 +427,23 @@ export default {
 
     ul {
         list-style: none;
+    }
+
+    .plus {
+        padding: 10px;
+        border-radius: 50%;
+        margin-left: 10px;
+        font-size: 25px;
+        position: absolute;
+        left: -80px;
+        top: 0;
+        font-weight: bold;
+        cursor: pointer;
+        display: none;
+    }
+
+    .songs-table .el-table__row:hover .plus{
+        display: block;
     }
 
     .playlist {

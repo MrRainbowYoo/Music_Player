@@ -77,25 +77,14 @@
                 </el-tab-pane>
             </el-tabs>            
         </div>
-
-
-        <div class="page-wrap">
-            <el-pagination
-            @current-change="handleCurrentChange"
-            background
-            layout="prev, pager, next"
-            :total="total"
-            :page-size="pageSize"
-            :current-page="page">
-            </el-pagination>            
-        </div>
-
+        <Pagination :total="total" :pageSize="pageSize" :nowPage="page" @changePage="handleCurrentChange"/>
         <div class="add-ball iconfont icon-yinfu" v-show="showAddBall" ref="addBall"></div>  
     </div>
 </template>
 
 <script scoped>
 import { playMusicAPI,searchAPI } from '@/utils/api'
+import Pagination from '@/components/Pagination.vue'
 
 export default {
     data(){
@@ -112,6 +101,9 @@ export default {
             loading:true,
             showAddBall:false
         }
+    },
+    components: {
+        Pagination
     },
     computed:{
         musicQueue(){
@@ -348,6 +340,8 @@ export default {
 </script>
 
 <style>
+    @import '../../assets/common/tab.css';
+
     .add-ball {
         position: fixed;
         color: rgb(236, 65, 65);
@@ -376,27 +370,9 @@ export default {
         font-size: 12px;
         color: grey;
     }
-
-    .el-tabs__active-bar {
-        background-color: rgb(236, 65, 65);
-    }
-
-    .el-tabs__item.is-active {
-        color: rgb(236, 65, 65);
-    }
     
     .el-tabs__item {
         font-size: 18px;
-    }
-
-    .el-tabs__item:not(.is-active):hover {
-        color: rgba(236, 65, 65, 0.555);
-    }
-
-    .page-wrap {
-        display: flex;
-        justify-content: center;
-        margin-top: 20px;
     }
 
     .plus {
@@ -414,20 +390,6 @@ export default {
 
     .songs-table .el-table__row:hover .plus{
         display: block;
-    }
-
-    .el-pagination.is-background .el-pager li:not(.disabled).active {
-        background-color: rgb(236, 65, 65);
-    }
-
-    .el-pagination.is-background .btn-next, .el-pagination.is-background .btn-prev, .el-pagination.is-background .el-pager li{
-        background: none;
-        border-radius: 5px;
-        border: 1px solid #f4f4f5;
-    }
-
-    .el-pagination.is-background .el-pager li:not(.disabled):not(.active):hover {
-        color: rgb(236, 65, 65)!important;
     }
 
     .mvIcon {

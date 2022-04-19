@@ -3,16 +3,16 @@
       <div class="index-left">
           <ul>
               <li>
-                  <router-link to="/discover"><span class="iconfont icon-yinle"></span>发现音乐</router-link>
+                  <router-link to="/discover"><span class="iconfont icon-yinle">发现音乐</span></router-link>
               </li>
               <li>
-                  <router-link to="/recommend"><span class="iconfont icon-yinleliebiao-"></span>推荐歌单</router-link>                  
+                  <router-link to="/recommend"><span class="iconfont icon-yinleliebiao-">推荐歌单</span></router-link>                  
               </li>
-              <li>
+              <!-- <li>
                   <router-link to="/newsongs"><span class="iconfont icon-music"></span>最新音乐</router-link>
-              </li>
+              </li> -->
               <li>
-                  <router-link to="/mvs"><span class="iconfont icon-bofangMV"></span>最新MV</router-link>
+                  <router-link to="/mvs"><span class="iconfont icon-bofangMV">最新MV</span></router-link>
               </li>
           </ul>
       </div>

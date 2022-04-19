@@ -207,6 +207,8 @@ export default {
 </script>
 
 <style>
+    @import '../assets/common/tab.css';
+
     .queue {
         width: 25%;
         min-width: 300px;

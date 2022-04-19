@@ -51,25 +51,15 @@
           </li>                                          
       </ul>
 
-
-      <div class="page-wrap">
-        <el-pagination
-        @current-change="handleCurrentChange"
-        background
-        layout="prev, pager, next"
-        :total="total"
-        :page-size="pageSize"
-        :current-page="page">
-        </el-pagination>            
-      </div>    
+    <Pagination :total="total" :pageSize="pageSize" :nowPage="page" @changePage="handleCurrentChange"/>
   </div>
 
- 
   </div>
 </template>
 
 <script >
 import { mvListAPI } from '@/utils/api'
+import Pagination from '@/components/Pagination.vue'
 
 export default {
   data(){
@@ -83,6 +73,9 @@ export default {
       mvList:[],
       loading:true
     }
+  },
+  components: {
+    Pagination
   },
   watch:{
     region(){

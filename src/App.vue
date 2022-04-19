@@ -53,6 +53,7 @@ export default {
     height: 100vh;
     display: flex;
     flex-direction: column;
+    min-width: 500px;
   }
 
   .header {

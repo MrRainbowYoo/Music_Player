@@ -6,7 +6,7 @@ let baseURL = ""
 if(process.env.NODE_ENV == "development"){
     baseURL = 'http://localhost:3000'
 }else{
-    baseURL = 'http://47.96.91.10:3000'
+    baseURL = 'http://duoduozuikeail.top:3000'
 }
 
 const service = axios.create({

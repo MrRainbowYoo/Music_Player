@@ -63,16 +63,7 @@
                                 </div>
                             </li>
                         </ul>
-                            <div class="page-wrap">
-                                <el-pagination
-                                @current-change="handleCurrentChange"
-                                background
-                                layout="prev, pager, next"
-                                :total="total"
-                                :page-size="pageSize"
-                                :current-page="page">
-                                </el-pagination>            
-                            </div>  
+                <Pagination :total="total" :pageSize="pageSize" :nowPage="page" @changePage="handleCurrentChange"/>
                         
         </div>          
       </div>
@@ -99,6 +90,7 @@
 <script>
 import {formatDateFully} from '@/utils/utils.js'
 import { commentsAPI,playMVAPI,simiMVAPI,mvDetailAPI,artistsAPI } from '@/utils/api'
+import Pagination from '@/components/Pagination.vue'
 
 export default {
     data(){
@@ -117,6 +109,9 @@ export default {
             loadingComments:false            
         }
     },
+    components: {
+        Pagination
+    },    
     watch:{
         $route(newVal){
             console.log(newVal)
@@ -240,12 +235,13 @@ ul {
 }
 
 .mv-wrap {
-    width: 700px;
+    width: 900px;
     margin-right: 30px;
 }
 
 .mv-recommend-wrap {
-    flex: 1;
+    /* flex: 1; */
+    width: 500px;
 }
 
 .video-wrap {
@@ -310,6 +306,7 @@ ul {
       position: relative;
       cursor: pointer;
       width: 180px;
+      height: 100px;
       margin-right: 20px;
   }
 
@@ -346,12 +343,17 @@ ul {
       top: 5px;
       right: 5px;
       color: #fff;
+      font-size: 12px;
+      text-shadow: 1px 1px #000;
   }
 
   .play-count::before {
       margin-right: 5px;
   }
 
+  .mv-info {
+      overflow: hidden;
+  }
 
  .mv-info p.title {
    overflow: hidden;
@@ -420,5 +422,6 @@ ul {
       right: 5px;
       color: #fff;
       font-size: 12px;
+      text-shadow: 1px 1px #000;
   }  
 </style>

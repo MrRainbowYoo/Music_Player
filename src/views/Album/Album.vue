@@ -94,16 +94,7 @@
                                 </div>
                             </li>
                         </ul>
-                            <div class="page-wrap">
-                                <el-pagination
-                                @current-change="handleCurrentChange"
-                                background
-                                layout="prev, pager, next"
-                                :total="total"
-                                :page-size="pageSize"
-                                :current-page="page">
-                                </el-pagination>            
-                            </div>  
+                            <Pagination :total="total" :pageSize="pageSize" :nowPage="page" @changePage="handleCurrentChange"/>
                     </div>
 
 
@@ -121,6 +112,7 @@
 <script>
 import {formatDate,formatDateFully} from '../../utils/utils'
 import { albumAPI,playMusicAPI,commentsAPI } from '@/utils/api'
+import Pagination from '@/components/Pagination.vue'
 
 export default {
     data(){
@@ -140,6 +132,9 @@ export default {
             loading:true,
             showAddBall:false            
         }
+    },
+    components: {
+        Pagination
     },
     created(){
         console.log(this.$route.query.id)
