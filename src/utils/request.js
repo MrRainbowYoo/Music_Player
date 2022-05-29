@@ -7,6 +7,7 @@ if(process.env.NODE_ENV == "development"){
     baseURL = 'http://localhost:3000'
 }else{
     baseURL = 'http://duoduozuikeail.top:3000'
+    // baseURL = 'https://netease-cloud-music-api-lemon-chi.vercel.app'
 }
 
 const service = axios.create({
