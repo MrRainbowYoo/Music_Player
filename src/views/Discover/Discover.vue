@@ -35,10 +35,10 @@
                 </li>                                                                                                                       
             </ul>
         </div>
-        <div class="songs-wrap">
+        <!-- <div class="songs-wrap">
             <h4>推荐MV</h4>
             <ul class="mv-list">
-                <li v-for="(item,index) in newMvs" :key="index" @click="toMvDetail(item.id)">
+                <li v-for="item in newMvs" :key="item.id" @click="toMvDetail(item.id)">
                     <div class="mv-img-wrap">
                         <img v-lazy="item.picUrl" alt="newMvs">
                         <p class="iconfont icon-play play"></p>
@@ -50,7 +50,7 @@
                     </div>
                 </li>                                              
             </ul>
-        </div>
+        </div> -->
     </div>
 </template>
 
